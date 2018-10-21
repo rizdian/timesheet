@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\School;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class SchoolController extends Controller
 {
@@ -14,8 +15,8 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        $schools = School::all();
-        return view('school.index', compact('schools'));
+//        $schools = School::all(); compact('schools')
+        return view('school.index');
     }
 
     /**
@@ -37,8 +38,8 @@ class SchoolController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'npsn'=>'required|max:8|unique:schools',
-            'nama'=> 'required|max:35',
+            'npsn' => 'required|max:8|unique:schools',
+            'nama' => 'required|max:35',
             'alamat' => 'required',
             'no_telp' => 'required|max:13'
         ]);
@@ -51,7 +52,7 @@ class SchoolController extends Controller
 
         $school->save();
 
-        return redirect('/school')->with('success', 'Information has been added');
+        return redirect('/school')->with('success', 'Sekolah telah ditambah');
     }
 
     /**
@@ -74,7 +75,7 @@ class SchoolController extends Controller
     public function edit($id)
     {
         $school = School::find($id);
-        return view('school.edit',compact('school','id'));
+        return view('school.edit', compact('school', 'id'));
     }
 
     /**
@@ -86,13 +87,21 @@ class SchoolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $school= School::find($id);
+        $request->validate([
+            'npsn' => 'required|max:8|',
+            'nama' => 'required|max:35',
+            'alamat' => 'required',
+            'no_telp' => 'required|max:13'
+        ]);
+
+        $school = School::find($id);
         $school->npsn = $request->get('npsn');
         $school->nama = $request->get('nama');
         $school->alamat = $request->get('alamat');
         $school->no_telp = $request->get('no_telp');
         $school->save();
-        return redirect('school');
+
+        return redirect('/school')->with('success', 'Sekolah telah diubah');
     }
 
     /**
@@ -105,6 +114,24 @@ class SchoolController extends Controller
     {
         $school = School::find($id);
         $school->delete();
-        return redirect('school')->with('success','Information has been  deleted');
+        return redirect('school')->with('success', 'Sekolah telah dihapus');
+    }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getData()
+    {
+        return DataTables::of(School::query())
+            ->addColumn('action', function ($school) {
+                return '<a href="school/' . $school->id . '/edit" class="btn btn-xs btn-primary">Edit</a>
+                        <form action="school/destroy/' . $school->id . '" method="post">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>';
+            })
+            ->editColumn('id', 'ID: {{$id}}')
+            ->make(true);
     }
 }

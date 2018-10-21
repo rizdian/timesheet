@@ -1,51 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Laravel 5.6 CRUD Tutorial With Example </title>
-    <link rel="stylesheet" href="{{asset('css/app.css')}}">
-</head>
-<body>
-<div class="container">
-    <h2>Edit A Form</h2><br  />
-    <form method="post" action="{{action('SchoolController@update', $id)}}">
-        @csrf
-        <input name="_method" type="hidden" value="PATCH">
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="form-group col-md-4">
-                <label for="npsn">NPSN:</label>
-                <input type="text" class="form-control" name="npsn" value="{{$school->npsn}}">
-            </div>
+@extends('layout')
+
+@section('content')
+    <style>
+        .uper {
+            margin-top: 40px;
+        }
+    </style>
+    <div class="card uper">
+        <div class="card-header">
+            Edit Share
         </div>
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="form-group col-md-4">
-                <label for="Nama">Nama:</label>
-                <input type="text" class="form-control" name="nama" value="{{$school->nama}}">
-            </div>
+        <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div><br />
+            @endif
+            <form method="post" action="{{ route('school.update', $school->id) }}">
+                @method('PATCH')
+                @csrf
+                <div class="form-group">
+                    <label for="npsn">NPSN:</label>
+                    <input type="text" class="form-control" name="npsn" maxlength="8" required value="{{$school->npsn}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="Nama">Nama:</label>
+                    <input type="text" class="form-control" name="nama" maxlength="35" required value="{{$school->nama}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="alamat">Alamat:</label>
+                    <textarea name="alamat" class="form-control" cols="20" rows="10" required>{{$school->alamat}}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="No Telp">No Telp:</label>
+                    <input type="text" class="form-control" name="no_telp" maxlength="13" required value="{{$school->no_telp}}"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
         </div>
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="form-group col-md-4">
-                <label for="alamat">Alamat:</label>
-                <textarea name="alamat" class="form-control" cols="20" rows="10">{{$school->alamat}}</textarea>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="form-group col-md-4" style="margin-left:38px">
-                <label for="No Telp">No Telp:</label>
-                <input type="text" class="form-control" name="no_telp" value="{{$school->no_telp}}">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="form-group col-md-4" style="margin-top:60px">
-                <button type="submit" class="btn btn-success" style="margin-left:38px">Update</button>
-            </div>
-        </div>
-    </form>
-</div>
-</body>
-</html>
+    </div>
+@endsection
