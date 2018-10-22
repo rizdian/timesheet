@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Siswa')
+@section('title', 'Sekolah')
 
 @section('content_header')
 
@@ -13,7 +13,7 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <div class="col-md-6">
-                            <h4><strong>Data Siswa</strong></h4>
+                            <h4><strong>Data Sekolah</strong></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <a onclick="addForm()" class="btn btn-success pull-right">Tambah</a>
@@ -23,16 +23,13 @@
                     <!-- form start -->
                     <form role="form">
                         <div class="box-body">
-                            <table class="table table-bordered" id="student-table">
+                            <table class="table table-bordered" id="scholls-table">
                                 <thead>
                                 <tr>
-                                    <th>NISN</th>
+                                    <th>NPSN</th>
                                     <th>Nama</th>
-                                    <th>Tempat Lahir</th>
-                                    <th>Tanggal Lahir</th>
-                                    <th>Jenis Kelamin</th>
-                                    <th>Agama</th>
                                     <th>Alamat</th>
+                                    <th>No Telepon</th>
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
@@ -43,7 +40,7 @@
             </div>
         </div>
 
-        @include('student.form')
+        @include('school.form')
     </section>
 @stop
 
@@ -55,18 +52,15 @@
             }
         });
 
-        var table =  $('#student-table').DataTable({
+        var table =  $('#scholls-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('data.student') !!}',
+            ajax: '{!! route('data.school') !!}',
             columns: [
-                { data: 'nisn', name: 'nisn' },
+                { data: 'npsn', name: 'npsn' },
                 { data: 'nama', name: 'nama' },
-                { data: 'tempat_lahir', name: 'tempat_lahir' },
-                { data: 'tanggal_lahir', name: 'tanggal_lahir' },
-                { data: 'jenis_kelamin', name: 'jenis_kelamin' },
-                { data: 'agama', name: 'agama' },
                 { data: 'alamat', name: 'alamat' },
+                { data: 'no_telp', name: 'no_telp' },
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -76,7 +70,7 @@
             $('input[name=_method]').val('POST');
             $('#modal-form').modal('show');
             $('#modal-form form')[0].reset();
-            $('.modal-title').text('Tambah Siswa');
+            $('.modal-title').text('Tambah Sekolah');
         }
 
         function editForm(id) {
@@ -84,12 +78,12 @@
             $('input[name=_method]').val('PATCH');
             $('#modal-form form')[0].reset();
             $.ajax({
-                url: "{{ url('student') }}" + '/' + id + "/edit",
+                url: "{{ url('school') }}" + '/' + id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
                     $('#modal-form').modal('show');
-                    $('.modal-title').text('Edit Siswa');
+                    $('.modal-title').text('Edit Sekolah');
 
                     $('#id').val(data.id);
                     $('#npsn').val(data.npsn);
@@ -111,19 +105,19 @@
         function deleteData(id) {
             swal({
                 title: "Apakah anda yakin?",
-                text: "Data Siswa ini akan di hapus!",
+                text: "Data Sekolah ini akan di hapus!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url : "{{ url('student') }}" + '/' + id,
+                        url : "{{ url('school') }}" + '/' + id,
                         type : "POST",
                         data : {'_method' : 'DELETE'},
                         success : function(data) {
                             table.ajax.reload();
-                            swal("Data Siswa Telah dihapus!", {
+                            swal("Data Sekolah Telah dihapus!", {
                                 icon: "success",
                             });
                         },
@@ -148,9 +142,9 @@
                 if (!e.isDefaultPrevented()){
                     var id = $('#id').val();
                     if (save_method == 'add')
-                        url = "{{ url('student') }}";
+                        url = "{{ url('school') }}";
                     else
-                        url = "{{ url('student') . '/' }}" + id;
+                        url = "{{ url('school') . '/' }}" + id;
 
                     $.ajax({
                         url : url,

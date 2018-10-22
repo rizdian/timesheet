@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <label for="npsn" class="col-md-3 control-label">NPSN</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="npsn" name="npsn" maxlength="8" autofocus required/>
+                            <input type="number" class="form-control" id="npsn" name="npsn" maxlength="8" autofocus required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                     <div class="form-group">
                         <label for="no_telp" class="col-md-3 control-label">No Telepon</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="no_telp" name="no_telp" maxlength="13" required/>
+                            <input type="number" class="form-control" id="no_telp" name="no_telp" maxlength="13" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
