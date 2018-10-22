@@ -20,5 +20,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('school','SchoolController');
+Route::resource('school','SchoolController', [
+    'except' => ['create','show']
+]);
 Route::get('data/school', 'SchoolController@getData')->name('data/school');

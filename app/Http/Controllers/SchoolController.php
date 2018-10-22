@@ -26,7 +26,6 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        return view('school.create');
     }
 
     /**
@@ -52,7 +51,12 @@ class SchoolController extends Controller
 
         $school->save();
 
-        return redirect('/school')->with('success', 'Sekolah telah ditambah');
+        return response()->json([
+            'success' => true,
+            'message' => 'Sekolah telah ditambah'
+        ]);
+
+        //return redirect('/school')->with('success', 'Sekolah telah ditambah');
     }
 
     /**
@@ -63,7 +67,6 @@ class SchoolController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -74,8 +77,11 @@ class SchoolController extends Controller
      */
     public function edit($id)
     {
-        $school = School::find($id);
-        return view('school.edit', compact('school', 'id'));
+        $school = School::findOrFail($id);
+        return $school;
+
+        /*$school = School::find($id);
+        return view('school.edit', compact('school', 'id'));*/
     }
 
     /**
@@ -94,14 +100,19 @@ class SchoolController extends Controller
             'no_telp' => 'required|max:13'
         ]);
 
-        $school = School::find($id);
+        $school = School::findOrFail($id);
         $school->npsn = $request->get('npsn');
         $school->nama = $request->get('nama');
         $school->alamat = $request->get('alamat');
         $school->no_telp = $request->get('no_telp');
-        $school->save();
+        $school->update();
 
-        return redirect('/school')->with('success', 'Sekolah telah diubah');
+        return response()->json([
+            'success' => true,
+            'message' => 'Sekolah telah diubah'
+        ]);
+
+        //return redirect('/school')->with('success', 'Sekolah telah diubah');
     }
 
     /**
@@ -114,7 +125,10 @@ class SchoolController extends Controller
     {
         $school = School::find($id);
         $school->delete();
-        return redirect('school')->with('success', 'Sekolah telah dihapus');
+        return response()->json([
+            'success' => true,
+            'message' => 'Sekolah Terhapus'
+        ]);
     }
 
     /**
@@ -126,12 +140,9 @@ class SchoolController extends Controller
     {
         return DataTables::of(School::query())
             ->addColumn('action', function ($school) {
-                return '<a href="school/' . $school->id . '/edit" class="btn btn-xs btn-primary">Edit</a>
-                        <form action="school/destroy/' . $school->id . '" method="post">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                        </form>';
+                return '<a onclick="editForm('. $school->id .')" data-toggle="tooltip" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;'.
+                    '<a onclick="deleteData('.$school->id.')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>';
             })
-            ->editColumn('id', 'ID: {{$id}}')
             ->make(true);
     }
 }
