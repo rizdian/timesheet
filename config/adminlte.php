@@ -121,10 +121,16 @@ return [
             'label'       => 4,
             'label_color' => 'success',
         ],
+        'DATA MASTER',
         [
             'text'        => 'Sekolah',
             'url'         => 'school',
             'icon'        => 'graduation-cap',
+        ],
+        [
+            'text'        => 'Siswa',
+            'url'         => 'student',
+            'icon'        => 'users',
         ],
         'ACCOUNT SETTINGS',
         [

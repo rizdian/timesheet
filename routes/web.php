@@ -29,5 +29,5 @@ Route::resource('student', 'StudentController', [
     'except' => ['create', 'show']
 ]);
 
-Route::get('data/student', 'SchoolController@getData')->name('data.student');
+Route::get('data/student', 'StudentController@getData')->name('data.student');
 

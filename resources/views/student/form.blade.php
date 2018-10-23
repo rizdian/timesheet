@@ -34,18 +34,18 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="Tanggal Lahir" class="col-md-3 control-label">Tanggal Lahir</label>
+                        <label for="tanggal_lahir" class="col-md-3 control-label">Tanggal Lahir</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="Tanggal Lahir" name="Tanggal Lahir" maxlength="15" required/>
+                            <input type="text" class="form-control" id="tanggal_lahir" name="tanggal_lahir" maxlength="15" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="jenis_kelamin" class="col-md-3 control-label">Jenis Kelamin</label>
+                        <label for="jen_kel" class="col-md-3 control-label">Jenis Kelamin</label>
                         <div class="col-md-6">
-                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
-                                <option value="p">Perempuan</option>
-                                <option value="l">Laki-laki</option>
+                            <select class="form-control" id="jen_kel" name="jen_kel">
+                                <option value="0">Laki-laki</option>
+                                <option value="1">Perempuan</option>
                             </select>
                             <span class="help-block with-errors"></span>
                         </div>
@@ -53,7 +53,14 @@
                     <div class="form-group">
                         <label for="agama" class="col-md-3 control-label">Agama</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="agama" name="agama" maxlength="10" required/>
+                            <select class="form-control" id="agama" name="agama">
+                                <option value="Islam">Islam</option>
+                                <option value="Protestan">Protestan</option>
+                                <option value="Katolik">Katolik</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Buddha">Buddha</option>
+                                <option value="Khonghucu">Khonghucu</option>
+                            </select>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -61,6 +68,13 @@
                         <label for="alamat" class="col-md-3 control-label">Alamat</label>
                         <div class="col-md-6">
                             <textarea id="alamat" name="alamat" class="form-control" cols="20" rows="10" required></textarea>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_sekolah" class="col-md-3 control-label">Sekolah</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="id_sekolah" name="id_sekolah" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

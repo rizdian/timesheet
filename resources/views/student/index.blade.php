@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Sekolah')
+@section('title', 'Siswa')
 
 @section('content_header')
 
@@ -13,7 +13,7 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <div class="col-md-6">
-                            <h4><strong>Data Sekolah</strong></h4>
+                            <h4><strong>Data Siswa</strong></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <a onclick="addForm()" class="btn btn-success pull-right">Tambah</a>
@@ -23,13 +23,17 @@
                     <!-- form start -->
                     <form role="form">
                         <div class="box-body">
-                            <table class="table table-bordered" id="scholls-table">
+                            <table class="table table-bordered" id="table">
                                 <thead>
                                 <tr>
-                                    <th>NPSN</th>
+                                    <th>NISN</th>
                                     <th>Nama</th>
-                                    <th>Alamat</th>
-                                    <th>No Telepon</th>
+                                    <th>tempat_lahir</th>
+                                    <th>tanggal_lahir</th>
+                                    <th>jen_kel</th>
+                                    <th>agama</th>
+                                    <th>alamat</th>
+                                    <th>id_sekolah</th>
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
@@ -40,7 +44,7 @@
             </div>
         </div>
 
-        @include('school.form')
+        @include('student.form')
     </section>
 @stop
 
@@ -52,15 +56,19 @@
             }
         });
 
-        var table =  $('#scholls-table').DataTable({
+        var table =  $('#table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('data.school') !!}',
+            ajax: '{!! route('data.student') !!}',
             columns: [
-                { data: 'npsn', name: 'npsn' },
+                { data: 'nisn', name: 'nisn' },
                 { data: 'nama', name: 'nama' },
+                { data: 'tempat_lahir', name: 'tempat_lahir' },
+                { data: 'tanggal_lahir', name: 'tanggal_lahir' },
+                { data: 'jen_kel', name: 'jen_kel' },
+                { data: 'agama', name: 'agama' },
                 { data: 'alamat', name: 'alamat' },
-                { data: 'no_telp', name: 'no_telp' },
+                { data: 'id_sekolah', name: 'id_sekolah' },
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -70,7 +78,7 @@
             $('input[name=_method]').val('POST');
             $('#modal-form').modal('show');
             $('#modal-form form')[0].reset();
-            $('.modal-title').text('Tambah Sekolah');
+            $('.modal-title').text('Tambah Siswa');
         }
 
         function editForm(id) {
@@ -78,18 +86,22 @@
             $('input[name=_method]').val('PATCH');
             $('#modal-form form')[0].reset();
             $.ajax({
-                url: "{{ url('school') }}" + '/' + id + "/edit",
+                url: "{{ url('student') }}" + '/' + id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
                     $('#modal-form').modal('show');
-                    $('.modal-title').text('Edit Sekolah');
+                    $('.modal-title').text('Edit Siswa');
 
                     $('#id').val(data.id);
-                    $('#npsn').val(data.npsn);
+                    $('#nisn').val(data.nisn);
                     $('#nama').val(data.nama);
+                    $('#tempat_lahir').val(data.tempat_lahir);
+                    $('#tanggal_lahir').val(data.tanggal_lahir);
+                    $('#jen_kel').val(data.jen_kel);
+                    $('#agama').val(data.agama);
                     $('#alamat').val(data.alamat);
-                    $('#no_telp').val(data.no_telp);
+                    $('#id_sekolah').val(data.id_sekolah);
                 },
                 error : function() {
                     swal({
@@ -105,19 +117,19 @@
         function deleteData(id) {
             swal({
                 title: "Apakah anda yakin?",
-                text: "Data Sekolah ini akan di hapus!",
+                text: "Data Siswa ini akan di hapus!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url : "{{ url('school') }}" + '/' + id,
+                        url : "{{ url('student') }}" + '/' + id,
                         type : "POST",
                         data : {'_method' : 'DELETE'},
                         success : function(data) {
                             table.ajax.reload();
-                            swal("Data Sekolah Telah dihapus!", {
+                            swal("Data Siswa Telah dihapus!", {
                                 icon: "success",
                             });
                         },
@@ -142,14 +154,13 @@
                 if (!e.isDefaultPrevented()){
                     var id = $('#id').val();
                     if (save_method == 'add')
-                        url = "{{ url('school') }}";
+                        url = "{{ url('student') }}";
                     else
-                        url = "{{ url('school') . '/' }}" + id;
+                        url = "{{ url('student') . '/' }}" + id;
 
                     $.ajax({
                         url : url,
                         type : "POST",
-                        //data : $('#modal-form form').serialize(),
                         data: new FormData($("#modal-form form")[0]),
                         contentType: false,
                         processData: false,
@@ -177,7 +188,5 @@
                 }
             });
         });
-
-
     </script>
 @endpush

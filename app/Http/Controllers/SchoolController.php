@@ -15,7 +15,6 @@ class SchoolController extends Controller
      */
     public function index()
     {
-//        $schools = School::all(); compact('schools')
         return view('school.index');
     }
 
@@ -53,10 +52,8 @@ class SchoolController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Sekolah telah ditambah'
+            'message' => 'Data sekolah telah ditambah'
         ]);
-
-        //return redirect('/school')->with('success', 'Sekolah telah ditambah');
     }
 
     /**
@@ -79,9 +76,6 @@ class SchoolController extends Controller
     {
         $school = School::findOrFail($id);
         return $school;
-
-        /*$school = School::find($id);
-        return view('school.edit', compact('school', 'id'));*/
     }
 
     /**
@@ -109,10 +103,8 @@ class SchoolController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Sekolah telah diubah'
+            'message' => 'Data sekolah telah diubah'
         ]);
-
-        //return redirect('/school')->with('success', 'Sekolah telah diubah');
     }
 
     /**
@@ -127,7 +119,7 @@ class SchoolController extends Controller
         $school->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Sekolah Terhapus'
+            'message' => 'Data sekolah Terhapus'
         ]);
     }
 

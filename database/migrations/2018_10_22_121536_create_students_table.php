@@ -20,9 +20,12 @@ class CreateStudentsTable extends Migration
             $table->string('tempat_lahir', 15);
             $table->date('tanggal_lahir');
             $table->boolean('jen_kel');
-            $table->string('Agama', 10);
+            $table->string('agama', 10);
             $table->mediumText('alamat');
+            $table->unsignedInteger('id_sekolah');
             $table->timestamps();
+
+            $table->foreign('id_sekolah')->references('id')->on('schools')->onDelete('cascade');
         });
     }
 
