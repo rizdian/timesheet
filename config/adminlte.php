@@ -123,14 +123,9 @@ return [
         ],
         'DATA MASTER',
         [
-            'text'        => 'Sekolah',
-            'url'         => 'school',
+            'text'        => 'Divisi',
+            'url'         => 'division',
             'icon'        => 'graduation-cap',
-        ],
-        [
-            'text'        => 'Siswa',
-            'url'         => 'student',
-            'icon'        => 'users',
         ],
         'ACCOUNT SETTINGS',
         [

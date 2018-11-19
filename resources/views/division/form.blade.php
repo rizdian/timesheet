@@ -13,30 +13,16 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="npsn" class="col-md-3 control-label">NPSN</label>
-                        <div class="col-md-6">
-                            <input type="number" class="form-control" id="npsn" name="npsn" maxlength="8" autofocus required/>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label for="nama" class="col-md-3 control-label">Nama</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="nama" name="nama" maxlength="35" required/>
+                            <input type="text" class="form-control" id="nama" name="nama" maxlength="20" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="alamat" class="col-md-3 control-label">Alamat</label>
+                        <label for="flag" class="col-md-3 control-label">Flag</label>
                         <div class="col-md-6">
-                            <textarea id="alamat" name="alamat" class="form-control" cols="20" rows="10" required></textarea>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="no_telp" class="col-md-3 control-label">No Telepon</label>
-                        <div class="col-md-6">
-                            <input type="number" class="form-control" id="no_telp" name="no_telp" maxlength="13" required/>
+                            <input type="number" class="form-control" id="flag" name="flag" maxlength="1" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Siswa')
+@section('title', 'Divisi')
 
 @section('content_header')
 
@@ -13,7 +13,7 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <div class="col-md-6">
-                            <h4><strong>Data Siswa</strong></h4>
+                            <h4><strong>Data Divisi</strong></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <a onclick="addForm()" class="btn btn-success pull-right">Tambah</a>
@@ -26,14 +26,8 @@
                             <table class="table table-bordered" id="table">
                                 <thead>
                                 <tr>
-                                    <th>NISN</th>
                                     <th>Nama</th>
-                                    <th>tempat_lahir</th>
-                                    <th>tanggal_lahir</th>
-                                    <th>jen_kel</th>
-                                    <th>agama</th>
-                                    <th>alamat</th>
-                                    <th>id_sekolah</th>
+                                    <th>Urutan</th>
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
@@ -44,7 +38,7 @@
             </div>
         </div>
 
-        @include('student.form')
+        @include('division.form')
     </section>
 @stop
 
@@ -56,19 +50,15 @@
             }
         });
 
-        var table =  $('#table').DataTable({
+        let fName = "Divisi";
+
+        let table = $('#table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('data.student') !!}',
+            ajax: '{!! route('data.division') !!}',
             columns: [
-                { data: 'nisn', name: 'nisn' },
-                { data: 'nama', name: 'nama' },
-                { data: 'tempat_lahir', name: 'tempat_lahir' },
-                { data: 'tanggal_lahir', name: 'tanggal_lahir' },
-                { data: 'jen_kel', name: 'jen_kel' },
-                { data: 'agama', name: 'agama' },
-                { data: 'alamat', name: 'alamat' },
-                { data: 'id_sekolah', name: 'id_sekolah' },
+                {data: 'nama', name: 'nama'},
+                {data: 'flag', name: 'flag'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -78,7 +68,7 @@
             $('input[name=_method]').val('POST');
             $('#modal-form').modal('show');
             $('#modal-form form')[0].reset();
-            $('.modal-title').text('Tambah Siswa');
+            $('.modal-title').text('Tambah ' + fName);
         }
 
         function editForm(id) {
@@ -86,24 +76,18 @@
             $('input[name=_method]').val('PATCH');
             $('#modal-form form')[0].reset();
             $.ajax({
-                url: "{{ url('student') }}" + '/' + id + "/edit",
+                url: "{{ url('division') }}" + '/' + id + "/edit",
                 type: "GET",
                 dataType: "JSON",
-                success: function(data) {
+                success: function (data) {
                     $('#modal-form').modal('show');
-                    $('.modal-title').text('Edit Siswa');
+                    $('.modal-title').text('Edit ' + fName);
 
                     $('#id').val(data.id);
-                    $('#nisn').val(data.nisn);
                     $('#nama').val(data.nama);
-                    $('#tempat_lahir').val(data.tempat_lahir);
-                    $('#tanggal_lahir').val(data.tanggal_lahir);
-                    $('#jen_kel').val(data.jen_kel);
-                    $('#agama').val(data.agama);
-                    $('#alamat').val(data.alamat);
-                    $('#id_sekolah').val(data.id_sekolah);
+                    $('#flag').val(data.flag);
                 },
-                error : function() {
+                error: function () {
                     swal({
                         title: 'Oops...',
                         text: "Data Tidak Ada",
@@ -117,23 +101,23 @@
         function deleteData(id) {
             swal({
                 title: "Apakah anda yakin?",
-                text: "Data Siswa ini akan di hapus!",
+                text: "Data " + fName + " ini akan di hapus!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url : "{{ url('student') }}" + '/' + id,
-                        type : "POST",
-                        data : {'_method' : 'DELETE'},
-                        success : function(data) {
+                        url: "{{ url('division') }}" + '/' + id,
+                        type: "POST",
+                        data: {'_method': 'DELETE'},
+                        success: function (data) {
                             table.ajax.reload();
-                            swal("Data Siswa Telah dihapus!", {
+                            swal("Data " + fName + " Telah dihapus!", {
                                 icon: "success",
                             });
                         },
-                        error : function () {
+                        error: function () {
                             swal({
                                 title: 'Oops...',
                                 text: data.message,
@@ -149,22 +133,23 @@
             });
         }
 
-        $(function(){
+        $(function () {
             $('#modal-form form').validator().on('submit', function (e) {
-                if (!e.isDefaultPrevented()){
-                    var id = $('#id').val();
+                if (!e.isDefaultPrevented()) {
+                    let id = $('#id').val();
+                    let url = null;
                     if (save_method == 'add')
-                        url = "{{ url('student') }}";
+                        url = "{{ url('division') }}";
                     else
-                        url = "{{ url('student') . '/' }}" + id;
+                        url = "{{ url('division') . '/' }}" + id;
 
                     $.ajax({
-                        url : url,
-                        type : "POST",
+                        url: url,
+                        type: "POST",
                         data: new FormData($("#modal-form form")[0]),
                         contentType: false,
                         processData: false,
-                        success : function(data) {
+                        success: function (data) {
                             $('#modal-form').modal('hide');
                             table.ajax.reload();
                             swal({
@@ -174,7 +159,7 @@
                                 timer: '1500'
                             })
                         },
-                        error : function(xhr, status, error){
+                        error: function (xhr, status, error) {
                             let err = JSON.parse(xhr.responseText);
                             swal({
                                 title: 'Oops...',
