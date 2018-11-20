@@ -125,18 +125,23 @@ return [
         [
             'text'        => 'Insentif',
             'url'         => 'incentive',
-            'icon'        => 'graduation-cap',
+            'icon'        => 'money',
         ],
         [
             'text'        => 'Divisi',
             'url'         => 'division',
-            'icon'        => 'graduation-cap',
+            'icon'        => 'line-chart',
+        ],
+        [
+            'text'        => 'Karyawan',
+            'url'         => 'employee',
+            'icon'        => 'users',
         ],
         'ACCOUNT SETTINGS',
         [
-            'text' => 'Profile',
+            'text' => 'User Login',
             'url'  => 'admin/settings',
-            'icon' => 'user',
+            'icon' => 'user-circle',
         ],
         [
             'text' => 'Change Password',

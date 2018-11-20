@@ -25,9 +25,18 @@ Route::resource('division', 'DivisionController', [
     'except' => ['create', 'show']
 ]);
 Route::get('data/division', 'DivisionController@getData')->name('data.division');
+Route::get('list/division', 'DivisionController@getList')->name('list.division');
 
 //Division
 Route::resource('incentive', 'IncentiveController', [
     'except' => ['create', 'show']
 ]);
 Route::get('data/incentive', 'IncentiveController@getData')->name('data.incentive');
+Route::get('list/incentive', 'IncentiveController@getList')->name('list.incentive');
+
+//Employee
+Route::resource('employee', 'EmployeeController', [
+    'except' => ['create', 'show']
+]);
+Route::get('data/employee', 'EmployeeController@getData')->name('data.employee');
+Route::get('list/employee', 'EmployeeController@getList')->name('list.employee');

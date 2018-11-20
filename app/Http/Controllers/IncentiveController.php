@@ -94,7 +94,7 @@ class IncentiveController extends Controller
         $incentive->nama = $request->get('nama');
         $incentive->harga = $request->get('harga');
 
-        $incentive->update();
+        $incentive->save();
 
         return response()->json([
             'success' => true,
@@ -130,5 +130,10 @@ class IncentiveController extends Controller
                     '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>';
             })
             ->make(true);
+    }
+
+    public function getList()
+    {
+        return Incentive::all();
     }
 }

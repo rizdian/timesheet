@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Division;
+use App\Employee;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
-class DivisionController extends Controller
+class EmployeeController extends Controller
 {
-    private $className = "Divisi";
+    private $className = "Karyawan";
 
     /**
      * Display a listing of the resource.
@@ -17,7 +19,8 @@ class DivisionController extends Controller
      */
     public function index()
     {
-        return view('division.index');
+        $lDivisi = Division::pluck('nama','id')->toArray();
+        return view('employee.index',compact('lDivisi'));
     }
 
     /**
@@ -27,24 +30,36 @@ class DivisionController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|max:20',
-            'flag' => 'required|numeric|max:10',
+            'nip' => 'required|max:10',
+            'nama' => 'required|max:50',
+            'tmpt_lahir' => 'required|max:30',
+            'tgl_lahir' => 'required|date',
+            'alamat' => 'required',
+            'division_id' => 'required',
         ]);
 
-        $data = new Division();
+        $newDate = new Carbon($request->get('tgl_lahir'));
+        $newDate->format('Y-m-d');
+
+        $data = new Employee();
+        $data->nip = $request->get('nip');
         $data->nama = $request->get('nama');
-        $data->flag = $request->get('flag');
+        $data->tmpt_lahir = $request->get('tmpt_lahir');
+        $data->tgl_lahir = $newDate;
+        $data->alamat = $request->get('alamat');
+        $data->division_id = $request->get('division_id');
 
         $data->save();
 
@@ -57,42 +72,54 @@ class DivisionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Division $division
+     * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function show(Division $division)
+    public function show(Employee $employee)
     {
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Division $division
+     * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Division $division)
+    public function edit(Employee $employee)
     {
-        return $division;
+        return $employee;
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Division $division
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Division $division)
+    public function update(Request $request, Employee $employee)
     {
         $request->validate([
-            'nama' => 'required|max:20',
-            'flag' => 'required|numeric|max:4',
+            'nip' => 'required|max:10',
+            'nama' => 'required|max:50',
+            'tmpt_lahir' => 'required|max:30',
+            'tgl_lahir' => 'required|date',
+            'alamat' => 'required',
+            'division_id' => 'required',
         ]);
 
-        $division->nama = $request->get('nama');
-        $division->flag = $request->get('flag');
+        $newDate = new Carbon($request->get('tgl_lahir'));
+        $newDate->format('Y-m-d');
 
-        $division->save();
+        $employee->nip = $request->get('nip');
+        $employee->nama = $request->get('nama');
+        $employee->tmpt_lahir = $request->get('tmpt_lahir');
+        $employee->tgl_lahir = $newDate;
+        $employee->alamat = $request->get('alamat');
+        $employee->division_id = $request->get('division_id');
+
+        $employee->save();
 
         return response()->json([
             'success' => true,
@@ -103,12 +130,12 @@ class DivisionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Division $division
+     * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Division $division)
+    public function destroy(Employee $employee)
     {
-        $division->delete();
+        $employee->delete();
         return response()->json([
             'success' => true,
             'message' => 'Data ' . $this->className . ' Telah Dihapus'
@@ -122,7 +149,8 @@ class DivisionController extends Controller
      */
     public function getData()
     {
-        return DataTables::of(Division::query())
+        $employees = Employee::with('division')->get();
+        return DataTables::of($employees)
             ->addColumn('action', function ($data) {
                 return '<a onclick="editForm(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
                     '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>';
@@ -132,6 +160,7 @@ class DivisionController extends Controller
 
     public function getList()
     {
-
+        $employees = Employee::all();
+        return $employees;
     }
 }
