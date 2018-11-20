@@ -20,21 +20,14 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
-//School
-Route::resource('school', 'SchoolController', [
-    'except' => ['create', 'show']
-]);
-Route::get('data/school', 'SchoolController@getData')->name('data.school');
-Route::get('list/school', 'SchoolController@getList')->name('list.school');
-
-//Student
-Route::resource('student', 'StudentController', [
-    'except' => ['create', 'show']
-]);
-Route::get('data/student', 'StudentController@getData')->name('data.student');
-
 //Division
 Route::resource('division', 'DivisionController', [
     'except' => ['create', 'show']
 ]);
 Route::get('data/division', 'DivisionController@getData')->name('data.division');
+
+//Division
+Route::resource('incentive', 'IncentiveController', [
+    'except' => ['create', 'show']
+]);
+Route::get('data/incentive', 'IncentiveController@getData')->name('data.incentive');

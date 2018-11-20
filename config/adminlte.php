@@ -123,6 +123,11 @@ return [
         ],
         'DATA MASTER',
         [
+            'text'        => 'Insentif',
+            'url'         => 'incentive',
+            'icon'        => 'graduation-cap',
+        ],
+        [
             'text'        => 'Divisi',
             'url'         => 'division',
             'icon'        => 'graduation-cap',

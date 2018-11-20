@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Division;
+use App\Incentive;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
-class DivisionController extends Controller
+class IncentiveController extends Controller
 {
-    private $className = "Divisi";
+    private $className = "Insentif";
 
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class DivisionController extends Controller
      */
     public function index()
     {
-        return view('division.index');
+        return view('incentive.index');
     }
 
     /**
@@ -27,6 +27,7 @@ class DivisionController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
@@ -39,12 +40,12 @@ class DivisionController extends Controller
     {
         $request->validate([
             'nama' => 'required|max:20',
-            'flag' => 'required|numeric|max:10',
+            'harga' => 'required|integer',
         ]);
 
-        $data = new Division();
+        $data = new Incentive();
         $data->nama = $request->get('nama');
-        $data->flag = $request->get('flag');
+        $data->harga = $request->get('harga');
 
         $data->save();
 
@@ -57,42 +58,43 @@ class DivisionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Division $division
+     * @param  \App\Incentive $incentive
      * @return \Illuminate\Http\Response
      */
-    public function show(Division $division)
+    public function show(Incentive $incentive)
     {
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Division $division
+     * @param  \App\Incentive $incentive
      * @return \Illuminate\Http\Response
      */
-    public function edit(Division $division)
+    public function edit(Incentive $incentive)
     {
-        return $division;
+        return $incentive;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Division $division
+     * @param  \App\Incentive $incentive
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Division $division)
+    public function update(Request $request, Incentive $incentive)
     {
         $request->validate([
             'nama' => 'required|max:20',
-            'flag' => 'required|numeric|max:4',
+            'harga' => 'required|integer',
         ]);
 
-        $division->nama = $request->get('nama');
-        $division->flag = $request->get('flag');
+        $incentive->nama = $request->get('nama');
+        $incentive->harga = $request->get('harga');
 
-        $division->update();
+        $incentive->update();
 
         return response()->json([
             'success' => true,
@@ -103,12 +105,12 @@ class DivisionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Division $division
+     * @param  \App\Incentive $incentive
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Division $division)
+    public function destroy(Incentive $incentive)
     {
-        $division->delete();
+        $incentive->delete();
         return response()->json([
             'success' => true,
             'message' => 'Data ' . $this->className . ' Telah Dihapus'
@@ -122,7 +124,7 @@ class DivisionController extends Controller
      */
     public function getData()
     {
-        return DataTables::of(Division::query())
+        return DataTables::of(Incentive::query())
             ->addColumn('action', function ($data) {
                 return '<a onclick="editForm(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
                     '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>';
