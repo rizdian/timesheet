@@ -21,5 +21,10 @@ class DatabaseSeeder extends Seeder
                     factory(App\Employee::class, rand(1,10))->make()
                 );
         });
+
+        // Role comes before User seeder here.
+        $this->call(RoleTableSeeder::class);
+        // User seeder will use the roles above created.
+        $this->call(UserTableSeeder::class);
     }
 }

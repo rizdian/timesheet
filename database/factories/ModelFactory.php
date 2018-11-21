@@ -4,7 +4,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Employee::class, function (Faker $faker) {
     return [
-        'nip' => $faker->title,
+        'nip' => $faker->randomDigit,
         'division_id' => function () {
             return factory(App\Division::class)->create()->id;
         },
@@ -17,7 +17,7 @@ $factory->define(App\Employee::class, function (Faker $faker) {
 
 $factory->define(App\Division::class, function (Faker $faker) {
     return [
-        'nama' => $faker->name,
-        'flag' => '0',
+        'nama' => $faker->firstName,
+        'flag' => $faker->biasedNumberBetween(0,10),
     ];
 });

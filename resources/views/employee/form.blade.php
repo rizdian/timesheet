@@ -1,7 +1,7 @@
 <div class="modal" id="modal-form" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="form-sekolah" method="post" class="form-horizontal" data-toggle="validator">
+            <form id="" method="post" class="form-horizontal" data-toggle="validator">
                 {{ csrf_field() }} {{ method_field('POST') }}
                 <input type="hidden" id="id" name="id">
                 <div class="modal-header">
@@ -50,7 +50,7 @@
                     <div class="form-group">
                         <label for="division_id" class="col-md-3 control-label">Divisi</label>
                         <div class="col-md-6">
-                            <select class="l-divisi form-control" id="division_id" name="division_id" required style="width: 100%;">
+                            <select class="form-control" id="division_id" name="division_id" required style="width: 100%;">
                                 @foreach($lDivisi as $key => $divisi)
                                     <option value="{{ $key }}">{{ $divisi }}</option>
                                 @endforeach

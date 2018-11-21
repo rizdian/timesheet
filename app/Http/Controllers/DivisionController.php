@@ -3,12 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Division;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class DivisionController extends Controller
 {
     private $className = "Divisi";
+
+    /**
+     * DivisionController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $request->user()->authorizeRoles(['super_admin', 'admin']);
+            return $next($request);
+        });
+    }
 
     /**
      * Display a listing of the resource.

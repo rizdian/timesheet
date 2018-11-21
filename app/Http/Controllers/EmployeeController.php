@@ -6,16 +6,30 @@ use App\Division;
 use App\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class EmployeeController extends Controller
 {
+    /**
+     * @var string
+     */
     private $className = "Karyawan";
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * EmployeeController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $request->user()->authorizeRoles(['super_admin', 'admin']);
+            return $next($request);
+        });
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -24,9 +38,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -34,10 +46,8 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -70,10 +80,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
+     * @param Employee $employee
      */
     public function show(Employee $employee)
     {
@@ -81,10 +88,8 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
+     * @param Employee $employee
+     * @return Employee
      */
     public function edit(Employee $employee)
     {
@@ -92,11 +97,9 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Employee $employee
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Employee $employee)
     {
@@ -128,10 +131,9 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Employee  $employee
-     * @return \Illuminate\Http\Response
+     * @param Employee $employee
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function destroy(Employee $employee)
     {
@@ -143,9 +145,8 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Process datatables ajax request.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return mixed
+     * @throws \Exception
      */
     public function getData()
     {
@@ -158,6 +159,9 @@ class EmployeeController extends Controller
             ->make(true);
     }
 
+    /**
+     * @return Employee[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function getList()
     {
         $employees = Employee::all();

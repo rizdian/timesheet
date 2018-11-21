@@ -140,15 +140,15 @@ return [
         'ACCOUNT SETTINGS',
         [
             'text' => 'User Login',
-            'url'  => 'admin/settings',
+            'url'  => 'user',
             'icon' => 'user-circle',
         ],
-        [
+        /*[
             'text' => 'Change Password',
             'url'  => 'admin/settings',
             'icon' => 'lock',
-        ],
-        [
+        ],*/
+        /*[
             'text'    => 'Multilevel',
             'icon'    => 'share',
             'submenu' => [
@@ -185,8 +185,8 @@ return [
                     'url'  => '#',
                 ],
             ],
-        ],
-        'LABELS',
+        ],*/
+        /*'LABELS',
         [
             'text'       => 'Important',
             'icon_color' => 'red',
@@ -198,7 +198,7 @@ return [
         [
             'text'       => 'Information',
             'icon_color' => 'aqua',
-        ],
+        ],*/
     ],
 
     /*

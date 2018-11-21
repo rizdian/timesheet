@@ -1,7 +1,7 @@
-<div class="modal" id="modal-form" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
+<div class="modal" id="modal-form-cp" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="" method="post" class="form-horizontal" data-toggle="validator">
+            <form method="post" class="form-horizontal" data-toggle="validator">
                 {{ csrf_field() }} {{ method_field('POST') }}
                 <input type="hidden" id="id" name="id">
                 <div class="modal-header">
@@ -13,16 +13,16 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama" class="col-md-3 control-label">Nama</label>
+                        <label for="password" class="col-md-3 control-label">Password</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="nama" name="nama" maxlength="20" required/>
+                            <input type="password" class="form-control" name="password" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="harga" class="col-md-3 control-label">Harga</label>
+                        <label for="password" class="col-md-3 control-label">Retype Password</label>
                         <div class="col-md-6">
-                            <input type="number" class="form-control" id="harga" name="harga" max="2000000" required/>
+                            <input type="password" class="form-control" name="password_confirmation" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

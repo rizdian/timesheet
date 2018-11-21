@@ -9,4 +9,8 @@ class Employee extends Model
     public function division(){
         return $this->belongsTo(Division::class);
     }
+
+    public function user(){
+        return $this->hasOne(User::class);
+    }
 }
