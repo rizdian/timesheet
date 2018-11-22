@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="form-group nm">
+                    <div class="form-group">
                         <label for="nama" class="col-md-3 control-label">Nama</label>
                         <div class="col-md-6">
                             <select class="form-control" id="employee_id" name="employee_id" required>
@@ -22,7 +22,7 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group em">
+                    <div class="form-group">
                         <label for="nama" class="col-md-3 control-label">Email</label>
                         <div class="col-md-6">
                             <input type="email" class="form-control" id="email" name="email" required/>

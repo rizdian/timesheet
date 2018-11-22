@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'Timesheet',
+    'title' => 'Aplikasi Pengajuan Insentif',
 
     'title_prefix' => '',
 
@@ -30,9 +30,9 @@ return [
     |
     */
 
-    'logo' => '<b>Time</b>Sheet',
+    'logo' => '<b>AP</b>Sen',
 
-    'logo_mini' => '<b>T</b>S',
+    'logo_mini' => '<b>A</b>PS',
 
     /*
     |--------------------------------------------------------------------------

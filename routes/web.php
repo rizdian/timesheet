@@ -51,4 +51,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('whoami', function (){
        dd(Auth::user());
     });
+
+    Route::post('change-role/{id}','UserController@changeRole')->name('change.role');
 });

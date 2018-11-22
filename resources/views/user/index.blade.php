@@ -28,6 +28,7 @@
                                 <tr>
                                     <th>Nama</th>
                                     <th>Email</th>
+                                    <th>Role</th>
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
@@ -40,6 +41,7 @@
 
         @include('user.form')
         @include('user.cp')
+        @include('user.rl')
     </section>
 @stop
 
@@ -60,6 +62,7 @@
             columns: [
                 {data: 'employee.nama', name: 'employee.nama'},
                 {data: 'email', name: 'email'},
+                {data: 'roles[0].description', name: 'roles[0].description'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -84,6 +87,30 @@
                     $('#modal-form-cp').modal('show');
                     $('.modal-title').text('Change Password ' + fName);
                     $('#id').val(data.id);
+                },
+                error: function () {
+                    swal({
+                        title: 'Oops...',
+                        text: "Data Tidak Ada",
+                        type: 'error',
+                        timer: '1500'
+                    })
+                }
+            });
+        }
+
+        function roleForm(id) {
+            $.ajax({
+                url: "{{ url('user') }}" + '/' + id + "/edit",
+                type: "GET",
+                dataType: "JSON",
+                success: function (data) {
+                    $('#modal-form-rl').modal('show');
+                    $('.modal-title').text('Change Role ' + fName);
+                    $('#id_user').val(data.id);
+                    let role_id = data.roles[0].id;
+                    $('#role_id').val(role_id);
+
                 },
                 error: function () {
                     swal({
@@ -136,7 +163,7 @@
                 if (!e.isDefaultPrevented()) {
                     let id = $('#id').val();
                     let url = null;
-                        url = "{{ url('user') }}";
+                    url = "{{ url('user') }}";
                     $.ajax({
                         url: url,
                         type: "POST",
@@ -171,7 +198,7 @@
                 if (!e.isDefaultPrevented()) {
                     let id = $('#id').val();
                     let url = null;
-                        url = "{{ url('user') . '/' }}" + id;
+                    url = "{{ url('user') . '/' }}" + id;
 
                     $.ajax({
                         url: url,
@@ -181,6 +208,42 @@
                         processData: false,
                         success: function (data) {
                             $('#modal-form-cp').modal('hide');
+                            table.ajax.reload();
+                            swal({
+                                title: 'Success!',
+                                icon: "success",
+                                text: data.message,
+                                timer: '1500'
+                            })
+                        },
+                        error: function (xhr, status, error) {
+                            let err = JSON.parse(xhr.responseText);
+                            swal({
+                                title: 'Oops...',
+                                text: "Kesalahan Input Data",
+                                icon: 'error',
+                                timer: '1500'
+                            })
+                        }
+                    });
+                    return false;
+                }
+            });
+
+            $('#modal-form-rl form').validator().on('submit', function (e) {
+                if (!e.isDefaultPrevented()) {
+                    let id = $('#id_user').val();
+                    let url = null;
+                    url = "{{ url('change-role') . '/' }}" + id;
+
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: new FormData($("#modal-form-rl form")[0]),
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            $('#modal-form-rl').modal('hide');
                             table.ajax.reload();
                             swal({
                                 title: 'Success!',
