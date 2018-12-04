@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInsentivePrfsTable extends Migration
+class CreateHistoryApproveTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateInsentivePrfsTable extends Migration
      */
     public function up()
     {
-        Schema::create('insentivePrfs', function (Blueprint $table) {
+        Schema::create('history_approves', function (Blueprint $table) {
             $table->increments('id');
+            $table->tinyInteger('status');
             $table->timestamps();
 
-            $table->unsignedInteger("incentive_id");
-            $table->foreign('incentive_id')->references('id')->on('incentives')->onDelete('cascade');
             $table->unsignedInteger("prf_id");
             $table->foreign('prf_id')->references('id')->on('prfs')->onDelete('cascade');
-
+            $table->unsignedInteger("employee_id");
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
     }
 
@@ -32,6 +32,6 @@ class CreateInsentivePrfsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('insentivePrfs');
+        Schema::dropIfExists('historyApproves');
     }
 }

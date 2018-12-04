@@ -110,16 +110,18 @@ return [
     'menu' => [
         'MAIN NAVIGATION',
         [
-            'text' => 'Blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
+            'text'        => 'List PRF',
+            'url'         => 'list/prf',
+            'icon'        => 'list-alt',
+            /*'label'       => 4,
+            'label_color' => 'success',*/
         ],
         [
-            'text'        => 'Pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'file',
-            'label'       => 4,
-            'label_color' => 'success',
+            'text'        => 'Placement Request Form',
+            'url'         => 'prf',
+            'icon'        => 'clipboard',
+            /*'label'       => 4,
+            'label_color' => 'success',*/
         ],
         'DATA MASTER',
         [

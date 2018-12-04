@@ -13,4 +13,8 @@ class Employee extends Model
     public function user(){
         return $this->hasOne(User::class);
     }
+
+    public function prf(){
+        return $this->hasOne(Prf::class);
+    }
 }

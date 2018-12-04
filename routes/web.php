@@ -18,6 +18,10 @@
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('whoami', function (){
+        dd(Auth::user());
+    });
+
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/home', 'HomeController@index')->name('home');
 
@@ -47,10 +51,13 @@ Route::group(['middleware' => 'auth'], function () {
         'except' => ['create', 'show']
     ]);
     Route::get('data/user', 'UserController@getData')->name('data.user');
-
-    Route::get('whoami', function (){
-       dd(Auth::user());
-    });
-
     Route::post('change-role/{id}','UserController@changeRole')->name('change.role');
+
+    //PRF
+    Route::resource('prf', 'PrfController');
+    Route::get('list/prf', 'PrfController@indexListApp');
+    Route::get('data/prf', 'PrfController@listApp')->name('data.prf');
+
+    Route::post('approve/prf', 'PrfController@approve');
+    Route::post('reject/prf', 'PrfController@reject');
 });

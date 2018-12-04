@@ -18,8 +18,8 @@ class CreatePrfsTable extends Migration
             $table->string('no_prf', 10);
             $table->enum('type', ['new','extention','replace','trial']);
             $table->string('nm_client', 50);
-            $table->longText('keterangan');
-            $table->longText('reason');
+            $table->longText('keterangan')->nullable();
+            $table->longText('reason')->nullable();
             $table->integer('flag');
             $table->date('start_project');
             $table->date('end_project');
