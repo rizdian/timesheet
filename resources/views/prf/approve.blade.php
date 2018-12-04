@@ -156,33 +156,37 @@
             $.ajax({
                 url: "{{ url('prf') }}" + '/' + id + "/edit",
                 type: "GET",
-                //data: { id: id },
                 success: function (data) {
                     $('#modal-form').modal('show');
                     $('.modal-title').text('Detail ' + fName);
-                    $('#no_prf').val(data.no_prf);
-                    $('#type').append($("<option></option>").text(data.type));
-                    $('#nm_client').val(data.nm_client);
-                    $('#employee').append($("<option></option>").text(data.employee.nama));
-                    let tgl = data.start_project +" - "+ data.end_project;
-                    $('#SEProject').val(tgl);
-                    $('#ket').val(data.keterangan);
+                    $('#modal-form form')[0].reset();
 
-                    $.each(data.insentiveprf, function(key, value) {
+                    $('#no_prf').val(data.header.no_prf);
+                    $('#type').append($("<option></option>").text(data.header.type));
+                    $('#nm_client').val(data.header.nm_client);
+                    $('#employee').append($("<option></option>").text(data.header.employee.nama));
+                    let tgl = data.header.start_project +" - "+ data.header.end_project;
+                    $('#SEProject').val(tgl);
+                    $('#ket').val(data.header.keterangan);
+
+                    $('#ITable tbody tr').remove();
+                    $.each(data.in, function(key, value) {
                         $('#ITable tbody').append('<tr>' +
-                            '<td>' + value.incentive_id + '</td>' +
-                            '<td>' + value.prf_id + '</td>' +
+                            '<td>' + value.nama + '</td>' +
+                            '<td>' + value.harga + '</td>' +
                             '</tr>');
                     });
 
-                    $.each(data.history_approves, function(key, value) {
+                    $('#HTable tbody tr').remove();
+                    $.each(data.hi, function(key, value) {
                         let sttus = "";
                         if (value.status == 1)
                             sttus = "Di-Approve";
                         else
                             sttus = "Di-Reject";
+
                         $('#HTable tbody').append('<tr>' +
-                            '<td>' + value.employee_id + '</td>' +
+                            '<td>' + value.nama + '</td>' +
                             '<td>' + sttus + '</td>' +
                             '<td>' + value.created_at + '</td>' +
                             '</tr>');

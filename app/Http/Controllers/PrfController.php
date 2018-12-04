@@ -34,7 +34,7 @@ class PrfController extends Controller
             ->whereRaw('employees.id NOT IN (SELECT DISTINCT employee_id FROM prfs WHERE flag != 0)')
             ->orderBy('nama')
             ->distinct()->get()->toArray();
-        return view('prf.index',compact(['lKry']));
+        return view('prf.index', compact(['lKry']));
     }
 
     /**
@@ -50,7 +50,7 @@ class PrfController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -72,7 +72,7 @@ class PrfController extends Controller
         $data->flag = 1;
 
         if ($data->save()) {
-            foreach ($request->get('insentif_id') as $value){
+            foreach ($request->get('insentif_id') as $value) {
                 $detail = new insentiveprf();
                 $detail->prfs_id = $data->id;
                 $detail->incentive_id = $value;
@@ -84,7 +84,7 @@ class PrfController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Prf  $prf
+     * @param  \App\Prf $prf
      * @return \Illuminate\Http\Response
      */
     public function show(Prf $prf)
@@ -94,21 +94,37 @@ class PrfController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Prf  $prf
+     * @param  \App\Prf $prf
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        return response()->json(
-            Prf::with(['Insentiveprf','historyApproves','employee'])->findOrFail($id)
-        );
+        $in = DB::table('insentiveprfs')
+            ->join('incentives', 'incentives.id', 'insentiveprfs.incentive_id')
+            ->join('prfs', 'prfs.id', 'insentiveprfs.prf_id')
+            ->where('prf_id', $id)
+            ->get()->toArray();
+
+        $hi = DB::table('history_approves')
+            ->join('prfs', 'prfs.id', 'history_approves.prf_id')
+            ->join('employees', 'employees.id', 'history_approves.employee_id')
+            ->where('prf_id', $id)
+            ->get()->toArray();
+
+
+        return response()->json([
+            'header' => Prf::with(['employee'])->findOrFail($id),
+            'in' => $in,
+            'hi' => $hi
+
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Prf  $prf
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Prf $prf
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Prf $prf)
@@ -119,7 +135,7 @@ class PrfController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Prf  $prf
+     * @param  \App\Prf $prf
      * @return \Illuminate\Http\Response
      */
     public function destroy(Prf $prf)
@@ -127,11 +143,13 @@ class PrfController extends Controller
         //
     }
 
-    public function indexListApp(){
+    public function indexListApp()
+    {
         return view('prf.approve');
     }
 
-    public function listApp(){
+    public function listApp()
+    {
         $prf = Prf::with('employee')->get();
         return DataTables::of($prf)
             ->addColumn('action', function ($data) {
@@ -142,7 +160,8 @@ class PrfController extends Controller
             ->make(true);
     }
 
-    public function approve(Request $request){
+    public function approve(Request $request)
+    {
         $id = $request->get('id');
         $isApp = Auth::user()->employee_id;
 
@@ -160,7 +179,8 @@ class PrfController extends Controller
         ]);
     }
 
-    public function reject(Request $request){
+    public function reject(Request $request)
+    {
         $id = $request->get('id');
         $alasan = $request->get('reason');
         $isApp = Auth::user()->employee_id;
