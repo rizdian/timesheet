@@ -15,7 +15,7 @@ class CreatePrfsTable extends Migration
     {
         Schema::create('prfs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('no_prf', 10);
+            $table->string('no_prf', 15);
             $table->enum('type', ['new','extention','replace','trial']);
             $table->string('nm_client', 50);
             $table->longText('keterangan')->nullable();

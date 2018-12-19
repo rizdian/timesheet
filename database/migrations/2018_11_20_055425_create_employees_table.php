@@ -20,6 +20,7 @@ class CreateEmployeesTable extends Migration
             $table->string('tmpt_lahir', 30);
             $table->date('tgl_lahir');
             $table->longText('alamat');
+            $table->enum('flag', ['isManager','isKeuangan','replace','trial']);
             $table->timestamps();
 
             $table->unsignedInteger("division_id");

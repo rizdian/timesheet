@@ -165,7 +165,7 @@
                     $('#type').append($("<option></option>").text(data.header.type));
                     $('#nm_client').val(data.header.nm_client);
                     $('#employee').append($("<option></option>").text(data.header.employee.nama));
-                    let tgl = data.header.start_project +" - "+ data.header.end_project;
+                    let tgl = moment(data.header.start_project).format('DD MMM YYYY') +" - "+ moment(data.header.end_project).format('DD MMM YYYY');
                     $('#SEProject').val(tgl);
                     $('#ket').val(data.header.keterangan);
 

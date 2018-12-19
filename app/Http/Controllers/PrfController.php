@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\HistoryApprove;
+use App\Incentive;
 use App\insentiveprf;
 use App\Prf;
 use Carbon\Carbon;
@@ -30,11 +31,24 @@ class PrfController extends Controller
             ->select('employees.id', 'nama')
             ->leftJoin('prfs', 'employees.id', 'prfs.employee_id')
             ->whereNull('prfs.employee_id')
+            ->where('division_id', 24)
             ->orWhere('prfs.flag', 0)
             ->whereRaw('employees.id NOT IN (SELECT DISTINCT employee_id FROM prfs WHERE flag != 0)')
             ->orderBy('nama')
             ->distinct()->get()->toArray();
-        return view('prf.index', compact(['lKry']));
+
+        $lInsen = Incentive::all();
+
+        $AWAL = 'PRF';
+        $noUrutAkhir = Prf::max('no_prf');
+        $no = 1;
+        if ($noUrutAkhir) {
+            $noFinal = $AWAL . '-' . date('Y') . '-' . sprintf("%03s", abs($noUrutAkhir + 1));
+        } else {
+            $noFinal = $AWAL . '-' . date('Y') . '-' . sprintf("%03s", $no);
+        }
+
+        return view('prf.index', compact(['lKry', 'lInsen', 'noFinal']));
     }
 
     /**

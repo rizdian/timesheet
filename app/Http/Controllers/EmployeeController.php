@@ -52,7 +52,7 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nip' => 'required|max:10',
+            'nip' => 'required|max:10|unique:employees',
             'nama' => 'required|max:50',
             'tmpt_lahir' => 'required|max:30',
             'tgl_lahir' => 'required|date',

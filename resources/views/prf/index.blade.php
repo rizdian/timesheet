@@ -31,7 +31,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="no_prf">No</label>
-                                    <input type="text" class="form-control" id="no_prf" name="no_prf" required maxlength="10">
+                                    <input type="text" class="form-control" id="no_prf" name="no_prf" required value="{{$noFinal}}" readonly="readonly">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="type">Type</label>
@@ -70,24 +70,24 @@
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-row" style="margin-bottom: 10px;">
-                                    <button type="button" class="btn btn-primary">Pilih Insentif</button>
+                                    <h4><strong>Pilih Insentif</strong></h4>
                                 </div>
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                     <tr class="table-primary">
+                                        <th></th>
                                         <th>Name</th>
                                         <th>Value</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td><input type="hidden" value="1" name="insentif_id[1]">Laptop</td>
-                                        <td>1.000.000</td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="hidden" value="2" name="insentif_id[2]">Makan</td>
-                                        <td>5.000.000</td>
-                                    </tr>
+                                    @foreach($lInsen as $key => $value)
+                                        <tr>
+                                            <td><input type="checkbox" value="{{$value->id}}" name="insentif_id[{{$value->id}}]"></td>
+                                            <td>{{$value->nama}}</td>
+                                            <td>{{$value->harga}}</td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
