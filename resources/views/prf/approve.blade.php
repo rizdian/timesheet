@@ -33,6 +33,7 @@
                                     <th>Nama Client</th>
                                     <th>Type Placement</th>
                                     <th>Nama Karyawan</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -67,7 +68,8 @@
                 {data: 'no_prf', name: 'no_prf'},
                 {data: 'nm_client', name: 'nm_client'},
                 {data: 'type', name: 'type',},
-                {data: 'employee.nama', name: 'employee.nama',},
+                {data: 'employee.nama', name: 'employee.nama'},
+                {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });

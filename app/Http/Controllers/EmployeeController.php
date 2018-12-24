@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Division;
 use App\Employee;
 use Carbon\Carbon;
+use http\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -33,8 +34,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $lDivisi = Division::pluck('nama','id')->toArray();
-        return view('employee.index',compact('lDivisi'));
+        $lDivisi = Division::pluck('nama', 'id')->toArray();
+        return view('employee.index', compact('lDivisi'));
     }
 
     /**
@@ -70,6 +71,10 @@ class EmployeeController extends Controller
         $data->tgl_lahir = $newDate;
         $data->alamat = $request->get('alamat');
         $data->division_id = $request->get('division_id');
+
+        $division = Division::find($data->division_id);
+        if ($division->nama == 'Manager') $data->flag = 'isManager';
+        if ($division->nama == 'Keuangan') $data->flag = 'isKeuangan';
 
         $data->save();
 
@@ -121,6 +126,11 @@ class EmployeeController extends Controller
         $employee->tgl_lahir = $newDate;
         $employee->alamat = $request->get('alamat');
         $employee->division_id = $request->get('division_id');
+
+        $division = Division::find($employee->division_id);
+        if ($division->nama == 'Manager') $employee->flag = 'isManager';
+        if ($division->nama == 'Keuangan') $employee->flag = 'isKeuangan';
+        if ($division->nama == 'Personalia') $employee->flag = 'isPersonalia';
 
         $employee->save();
 

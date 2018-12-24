@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Employee;
 use App\HistoryApprove;
 use App\Incentive;
 use App\insentiveprf;
@@ -26,6 +27,8 @@ class PrfController extends Controller
      */
     public function index()
     {
+        $divisi = $this->getDivisi();
+        if ($divisi->nama != 'Personalia') abort(401, 'This action is unauthorized.');
 
         $lKry = DB::table('employees')
             ->select('employees.id', 'nama')
@@ -43,7 +46,8 @@ class PrfController extends Controller
         $noUrutAkhir = Prf::max('no_prf');
         $no = 1;
         if ($noUrutAkhir) {
-            $noFinal = $AWAL . '-' . date('Y') . '-' . sprintf("%03s", abs($noUrutAkhir + 1));
+            $tempNo = explode('-', $noUrutAkhir);
+            $noFinal = $AWAL . '-' . date('Y') . '-' . sprintf("%03s", abs($tempNo[2] + 1));
         } else {
             $noFinal = $AWAL . '-' . date('Y') . '-' . sprintf("%03s", $no);
         }
@@ -70,9 +74,9 @@ class PrfController extends Controller
     public function store(Request $request)
     {
         $newDate = explode("-", $request->input('SEProject'));
-        $sDate = new Carbon($newDate[0]);
+        $sDate = Carbon::createFromFormat('d/m/Y', trim($newDate[0]));
+        $eDate = Carbon::createFromFormat('d/m/Y', trim($newDate[1]));
         $sDate->format('Y-m-d');
-        $eDate = new Carbon($newDate[1]);
         $eDate->format('Y-m-d');
 
         $data = new Prf();
@@ -80,19 +84,21 @@ class PrfController extends Controller
         $data->type = $request->get('type');
         $data->nm_client = $request->get('nm_client');
         $data->employee_id = $request->get('employee_id');
-        $data->start_project = $sDate;
-        $data->end_project = $eDate;
+        $data->start_project = $sDate->toDateString();
+        $data->end_project = $eDate->toDateString();
         $data->keterangan = $request->get('keterangan');
         $data->flag = 1;
 
         if ($data->save()) {
             foreach ($request->get('insentif_id') as $value) {
                 $detail = new insentiveprf();
-                $detail->prfs_id = $data->id;
+                $detail->prf_id = $data->id;
                 $detail->incentive_id = $value;
                 $detail->save();
             }
         }
+
+        return redirect('/');
     }
 
     /**
@@ -164,14 +170,32 @@ class PrfController extends Controller
 
     public function listApp()
     {
-        $prf = Prf::with('employee')->get();
-        return DataTables::of($prf)
-            ->addColumn('action', function ($data) {
-                return '<a onclick="actionApprove(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
-                    '<a onclick="actionReject(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;' .
-                    '<a onclick="actionDetail(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-default"> <i class="fa fa-search"></i> </a>';
-            })
-            ->make(true);
+        $prfByLogin = Prf::with('employee')->where('employee_id', Auth::user()->employee_id)->get();
+        if ($prfByLogin->count() != 0){
+            return DataTables::of($prfByLogin)
+                ->addColumn('action', function ($data) {
+                    return '<a onclick="actionDetail(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-default"> <i class="fa fa-search"></i> </a>';
+                })->editColumn('status', function($data) {
+                    if ($data->flag == 1 || $data->flag == 2) return 'Di Proses';
+                    elseif ($data->flag == 0 ) return 'Di Tolak';
+                    else return 'Di Setujui';
+                })
+                ->make(true);
+        }else{
+            $divisi = $this->getDivisi();
+            $prf = Prf::with('employee')->where('flag', $divisi->flag)->get();
+            return DataTables::of($prf)
+                ->addColumn('action', function ($data) {
+                    return '<a onclick="actionApprove(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
+                        '<a onclick="actionReject(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;' .
+                        '<a onclick="actionDetail(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-default"> <i class="fa fa-search"></i> </a>';
+                })->editColumn('status', function($data) {
+                    if ($data->flag == 1 || $data->flag == 2) return 'Di Proses';
+                    elseif ($data->flag == 0 ) return 'Di Tolak';
+                    else return 'Di Setujui';
+                })
+                ->make(true);
+        }
     }
 
     public function approve(Request $request)
@@ -212,5 +236,11 @@ class PrfController extends Controller
         return response()->json([
             'success' => true
         ]);
+    }
+
+    private function getDivisi(){
+        $user = Auth::user();
+        $divisi = Employee::with('division')->where('id',$user->employee_id)->first();
+        return $divisi->division;
     }
 }

@@ -67,4 +67,9 @@ class User extends Authenticatable
     {
         return null !== $this->roles()->where('name', $role)->first();
     }
+    
+    public function getFlag($employee)
+    {
+        return null !== $this->employee()->division()->where('employee_id' , $employee)->get();
+    }
 }
