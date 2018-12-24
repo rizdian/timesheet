@@ -27,7 +27,7 @@
                                 <thead>
                                 <tr>
                                     <th>Nama</th>
-                                    <th>Urutan</th>
+                                    {{--<th>Urutan</th>--}}
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
@@ -58,7 +58,7 @@
             ajax: '{!! route('data.division') !!}',
             columns: [
                 {data: 'nama', name: 'nama'},
-                {data: 'flag', name: 'flag'},
+                // {data: 'flag', name: 'flag'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -138,7 +138,7 @@
                 if (!e.isDefaultPrevented()) {
                     let id = $('#id').val();
                     let url = null;
-                    if (save_method == 'add')
+                    if (save_method === 'add')
                         url = "{{ url('division') }}";
                     else
                         url = "{{ url('division') . '/' }}" + id;

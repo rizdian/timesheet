@@ -33,6 +33,7 @@
                                     <th>Nama Client</th>
                                     <th>Type Placement</th>
                                     <th>Nama Karyawan</th>
+                                    <th>Masa Placement</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -63,12 +64,14 @@
         let table = $('#table').DataTable({
             processing: true,
             serverSide: true,
+            "order": [[ 0, "desc" ]],
             ajax: '{!! route('data.prf') !!}',
             columns: [
                 {data: 'no_prf', name: 'no_prf'},
                 {data: 'nm_client', name: 'nm_client'},
                 {data: 'type', name: 'type',},
                 {data: 'employee.nama', name: 'employee.nama'},
+                {data: 'date', name: 'date'},
                 {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]

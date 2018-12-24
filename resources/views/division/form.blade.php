@@ -22,7 +22,7 @@
                     <div class="form-group">
                         <label for="flag" class="col-md-3 control-label">Flag</label>
                         <div class="col-md-6">
-                            <input type="number" class="form-control" id="flag" name="flag" maxlength="1" required/>
+                            <input type="number" class="form-control" id="flag" name="flag" maxlength="1" value="0" required readonly/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

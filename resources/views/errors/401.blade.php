@@ -9,10 +9,10 @@
 @section('content')
     <section class="content">
         <div class="error-page">
-            <h2 class="headline text-yellow">403</h2>
+            <h2 class="headline text-yellow">401</h2>
 
             <div class="error-content">
-                <h3><i class="fa fa-warning text-yellow"></i> Oops! Forbbiden access</h3>
+                <h3><i class="fa fa-warning text-yellow"></i> Oops! UNAUTHORIZED</h3>
 
                 <p>
                     You are not authorized to access requested url.<br/>

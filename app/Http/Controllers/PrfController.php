@@ -18,7 +18,7 @@ class PrfController extends Controller
     /**
      * @var string
      */
-    private $className = "Prf";
+    //private $className = "Prf";
 
     /**
      * Display a listing of the resource.
@@ -33,10 +33,16 @@ class PrfController extends Controller
         $lKry = DB::table('employees')
             ->select('employees.id', 'nama')
             ->leftJoin('prfs', 'employees.id', 'prfs.employee_id')
-            ->whereNull('prfs.employee_id')
             ->where('division_id', 24)
-            ->orWhere('prfs.flag', 0)
-            ->whereRaw('employees.id NOT IN (SELECT DISTINCT employee_id FROM prfs WHERE flag != 0)')
+            ->whereRaw('( 
+                                employees.id NOT IN (SELECT DISTINCT employee_id FROM prfs WHERE flag != 0)
+                                OR
+                                employees.id NOT IN 
+                                    (
+                                        SELECT DISTINCT employee_id FROM prfs WHERE now() >= prfs.start_project and now() <= prfs.end_project
+                                    )
+                            )'
+            )
             ->orderBy('nama')
             ->distinct()->get()->toArray();
 
@@ -171,30 +177,54 @@ class PrfController extends Controller
     public function listApp()
     {
         $prfByLogin = Prf::with('employee')->where('employee_id', Auth::user()->employee_id)->get();
-        if ($prfByLogin->count() != 0){
+        if ($prfByLogin->count() != 0) {
             return DataTables::of($prfByLogin)
                 ->addColumn('action', function ($data) {
-                    return '<a onclick="actionDetail(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-default"> <i class="fa fa-search"></i> </a>';
-                })->editColumn('status', function($data) {
+                    return '<a onclick="actionDetail(' . $data->id . ')" class="btn btn-xs btn-default"> <i class="fa fa-search"></i> </a>';
+                })->editColumn('status', function ($data) {
                     if ($data->flag == 1 || $data->flag == 2) return 'Di Proses';
-                    elseif ($data->flag == 0 ) return 'Di Tolak';
+                    elseif ($data->flag == 0) return 'Di Tolak';
                     else return 'Di Setujui';
+                })->editColumn('date', function ($data){
+                    return date("d M Y", strtotime($data->start_project)) . ' - ' . date("d M Y", strtotime($data->end_project));
                 })
                 ->make(true);
-        }else{
+        } else {
             $divisi = $this->getDivisi();
-            $prf = Prf::with('employee')->where('flag', $divisi->flag)->get();
-            return DataTables::of($prf)
-                ->addColumn('action', function ($data) {
-                    return '<a onclick="actionApprove(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
-                        '<a onclick="actionReject(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;' .
-                        '<a onclick="actionDetail(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-default"> <i class="fa fa-search"></i> </a>';
-                })->editColumn('status', function($data) {
-                    if ($data->flag == 1 || $data->flag == 2) return 'Di Proses';
-                    elseif ($data->flag == 0 ) return 'Di Tolak';
-                    else return 'Di Setujui';
-                })
-                ->make(true);
+            if ($divisi->name = 'Personalia') {
+                $prf = Prf::with('employee')->get();
+                return DataTables::of($prf)
+                    ->addColumn('action', function ($data) {
+                        if ($data->flag == 1) {
+                            return '<a onclick="actionReject(' . $data->id . ')" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;' .
+                                '<a onclick="actionDetail(' . $data->id . ')" class="btn btn-xs btn-default"> <i class="fa fa-search"></i> </a>';
+                        } else {
+                            return '<a onclick="actionDetail(' . $data->id . ')" class="btn btn-xs btn-default"> <i class="fa fa-search"></i> </a>';
+                        }
+                    })->editColumn('status', function ($data) {
+                        if ($data->flag == 1 || $data->flag == 2) return 'Di Proses';
+                        elseif ($data->flag == 0) return 'Di Tolak';
+                        else return 'Di Setujui';
+                    })->editColumn('date', function ($data){
+                        return date("d M Y", strtotime($data->start_project)) . ' - ' . date("d M Y", strtotime($data->end_project));
+                    })
+                    ->make(true);
+            } else {
+                $prf = Prf::with('employee')->where('flag', $divisi->flag)->get();
+                return DataTables::of($prf)
+                    ->addColumn('action', function ($data) {
+                        return '<a onclick="actionApprove(' . $data->id . ')" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
+                            '<a onclick="actionReject(' . $data->id . ')" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;' .
+                            '<a onclick="actionDetail(' . $data->id . ')" class="btn btn-xs btn-default"> <i class="fa fa-search"></i> </a>';
+                    })->editColumn('status', function ($data) {
+                        if ($data->flag == 1 || $data->flag == 2) return 'Di Proses';
+                        elseif ($data->flag == 0) return 'Di Tolak';
+                        else return 'Di Setujui';
+                    })->editColumn('date', function ($data){
+                        return date("d M Y", strtotime($data->start_project)) . ' - ' . date("d M Y", strtotime($data->end_project));
+                    })
+                    ->make(true);
+            }
         }
     }
 
@@ -238,9 +268,10 @@ class PrfController extends Controller
         ]);
     }
 
-    private function getDivisi(){
+    private function getDivisi()
+    {
         $user = Auth::user();
-        $divisi = Employee::with('division')->where('id',$user->employee_id)->first();
+        $divisi = Employee::with('division')->where('id', $user->employee_id)->first();
         return $divisi->division;
     }
 }
