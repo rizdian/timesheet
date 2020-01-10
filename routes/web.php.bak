@@ -25,27 +25,26 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/home', 'HomeController@index')->name('home');
 
-    //Donatur
-    Route::resource('donatur', 'DonaturController', [
+    //Division
+    Route::resource('division', 'DivisionController', [
         'except' => ['create', 'show']
     ]);
-    Route::get('data/donatur', 'DonaturController@getData')->name('data.donatur');
-    Route::get('list/donatur', 'DonaturController@getList')->name('list.donatur');
+    Route::get('data/division', 'DivisionController@getData')->name('data.division');
+    Route::get('list/division', 'DivisionController@getList')->name('list.division');
 
-    //Anak Asuh
-    Route::resource('anakAsuh', 'AnakAsuhController', [
+    //Division
+    Route::resource('incentive', 'IncentiveController', [
         'except' => ['create', 'show']
     ]);
-    Route::get('data/anakAsuh', 'AnakAsuhController@getData')->name('data.anakAsuh');
-    Route::get('list/anakAsuh', 'AnakAsuhController@getList')->name('list.anakAsuh');
-    Route::get('anakAsuh/download/{filename}', 'AnakAsuhController@downloadProfile');
+    Route::get('data/incentive', 'IncentiveController@getData')->name('data.incentive');
+    Route::get('list/incentive', 'IncentiveController@getList')->name('list.incentive');
 
-    //Donasi
-    Route::resource('donasi', 'DonasiController', [
+    //Employee
+    Route::resource('employee', 'EmployeeController', [
         'except' => ['create', 'show']
     ]);
-    Route::get('data/donasi', 'DonasiController@getData')->name('data.donasi');
-    Route::get('list/donasi', 'DonasiController@getList')->name('list.donasi');
+    Route::get('data/employee', 'EmployeeController@getData')->name('data.employee');
+    Route::get('list/employee', 'EmployeeController@getList')->name('list.employee');
 
     //User
     Route::resource('user', 'UserController', [
@@ -53,4 +52,12 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
     Route::get('data/user', 'UserController@getData')->name('data.user');
     Route::post('change-role/{id}','UserController@changeRole')->name('change.role');
+
+    //PRF
+    Route::resource('prf', 'PrfController');
+    Route::get('list/prf', 'PrfController@indexListApp');
+    Route::get('data/prf', 'PrfController@listApp')->name('data.prf');
+
+    Route::post('approve/prf', 'PrfController@approve');
+    Route::post('reject/prf', 'PrfController@reject');
 });

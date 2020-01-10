@@ -60,7 +60,8 @@
 @endif
 
 <script src="{{ asset('vendor/sweetalert.min.js') }}"></script>
-<script src="{{ asset('vendor/validator/validator.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.10.2/validator.min.js"></script>
+
 
 @yield('adminlte_js')
 

@@ -30,9 +30,9 @@ return [
     |
     */
 
-    'logo' => '<b>Rekap</b>Donasi',
+    'logo' => '<b>Ap</b>Sen',
 
-    'logo_mini' => '<b>R</b>DNS',
+    'logo_mini' => '<b>R</b>PS',
 
     /*
     |--------------------------------------------------------------------------
@@ -110,25 +110,34 @@ return [
     'menu' => [
         'MAIN NAVIGATION',
         [
-            'text'        => 'Donasi',
-            'url'         => 'donasi',
-            'icon'        => 'money',
+            'text'        => 'List PRF',
+            'url'         => 'list/prf',
+            'icon'        => 'list-alt',
+            /*'label'       => 4,
+            'label_color' => 'success',*/
         ],
         [
-            'text'        => 'Laporan Donasi',
-            'url'         => 'donasi',
-            'icon'        => 'line-chart',
+            'text'        => 'Placement Request Form',
+            'url'         => 'prf',
+            'icon'        => 'clipboard',
+            /*'label'       => 4,
+            'label_color' => 'success',*/
         ],
         'DATA MASTER',
         [
-            'text'        => 'Donatur',
-            'url'         => 'donatur',
-            'icon'        => 'users',
+            'text'        => 'Insentif',
+            'url'         => 'incentive',
+            'icon'        => 'money',
         ],
         [
-            'text'        => 'Anak Asuh',
-            'url'         => 'anakAsuh',
-            'icon'        => 'address-card-o',
+            'text'        => 'Divisi',
+            'url'         => 'division',
+            'icon'        => 'line-chart',
+        ],
+        [
+            'text'        => 'Karyawan',
+            'url'         => 'employee',
+            'icon'        => 'users',
         ],
         'ACCOUNT SETTINGS',
         [
