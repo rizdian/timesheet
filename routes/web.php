@@ -31,6 +31,8 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
     Route::get('data/donatur', 'DonaturController@getData')->name('data.donatur');
     Route::get('list/donatur', 'DonaturController@getList')->name('list.donatur');
+    Route::get('donatur/{id}/donasi', 'DonaturController@getPageListDonasi')->name('page.list.donatur-donasi');
+    Route::get('data/{id}/donasi', 'DonaturController@getListDonasi')->name('list.donatur-donasi');
 
     //Anak Asuh
     Route::resource('anakAsuh', 'AnakAsuhController', [
@@ -46,6 +48,11 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
     Route::get('data/donasi', 'DonasiController@getData')->name('data.donasi');
     Route::get('list/donasi', 'DonasiController@getList')->name('list.donasi');
+    Route::get('donasi/download/{filename}', 'DonasiController@downloadBukti');
+
+    //REKAP DONASI
+    Route::get('rekap/donasi', 'RekapDonasiController@showRekapDonasi')->name('rekap.donasi');
+    Route::post('rekap/donasi', 'RekapDonasiController@displayReport')->name('post.rekap.donasi');
 
     //User
     Route::resource('user', 'UserController', [

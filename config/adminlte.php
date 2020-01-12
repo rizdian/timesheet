@@ -116,7 +116,7 @@ return [
         ],
         [
             'text'        => 'Laporan Donasi',
-            'url'         => 'donasi',
+            'url'         => 'rekap/donasi',
             'icon'        => 'line-chart',
         ],
         'DATA MASTER',

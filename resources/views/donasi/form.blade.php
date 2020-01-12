@@ -1,7 +1,7 @@
 <div class="modal" id="modal-form" tabindex="1" role="dialog" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="" method="post" class="form-horizontal" data-toggle="validator" enctype="multipart/form-data">
+            <form id="" method="post" class="form-horizontal" data-toggle="validator">
                 {{ csrf_field() }} {{ method_field('POST') }}
                 <input type="hidden" id="id" name="id">
                 <div class="modal-header">
@@ -10,24 +10,34 @@
                     </button>
                     <h3 class="modal-title"></h3>
                 </div>
-
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="tmpt_lahir" class="col-md-3 control-label">No Registrasi</label>
+                        <label for="division_id" class="col-md-3 control-label">Donatur</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="no_reg" name="no_reg" maxlength="10" required/>
+                            <select class="form-control" id="donatur_id" name="donatur_id" required style="width: 100%;">
+                                @foreach($lDonatur as $key => $value)
+                                    <option value="{{ $key }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="nama" class="col-md-3 control-label">Nama</label>
+                        <label for="nama" class="col-md-3 control-label">Nominal</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="nama" name="nama" maxlength="50" required/>
+                            <input type="number" class="form-control" id="nominal" name="nominal" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="nama" class="col-md-3 control-label">File Profil</label>
+                        <label for="tgl_lahir" class="col-md-3 control-label">Tanggal Transfer</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control datepicker" id="tgl_transfer" name="tgl_transfer" required readonly/>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nama" class="col-md-3 control-label">Bukti Bayar</label>
                         <div class="col-md-6">
                             <input type="file" name="filename" class="form-control" required>
                             <span class="help-block with-errors"></span>

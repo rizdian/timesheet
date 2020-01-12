@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Anak Asuh')
+@section('title', 'Donasi')
 
 @section('content_header')
 
@@ -17,7 +17,7 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <div class="col-md-6">
-                            <h4><strong>Data Anak Asuh</strong></h4>
+                            <h4><strong>Data Donasi</strong></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <a onclick="addForm()" class="btn btn-success pull-right">Tambah</a>
@@ -30,9 +30,10 @@
                             <table class="table table-bordered" id="table">
                                 <thead>
                                 <tr>
-                                    <th>No Registrasi</th>
-                                    <th>Nama</th>
-                                    <th>Profil</th>
+                                    <th>Donatur</th>
+                                    <th>Nominal</th>
+                                    <th>Tanggal Transfer</th>
+                                    <th>Bukti Bayar</th>
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
@@ -43,7 +44,7 @@
             </div>
         </div>
 
-        @include('anakAsuh.form')
+        @include('donasi.form')
     </section>
 @stop
 
@@ -56,29 +57,42 @@
             }
         });
 
-        let fName = "Anak Asuh";
+        let fName = "Donasi";
 
         $('.datepicker').datepicker({dateFormat: 'dd-M-yy'});
 
         let table = $('#table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('data.anakAsuh') !!}',
+            ajax: '{!! route('data.donasi') !!}',
             columns: [
-                {data: 'no_reg', name: 'no_reg'},
-                {data: 'nama', name: 'nama'},
+                {data: 'donatur.nama', name: 'donatur.nama'},
+                {data: 'nominal', name: 'nominal'},
+                {data: 'tgl_transfer', name: 'tgl_transfer'},
                 {
                     "data": "filename",
                     "render": function(data, type, row, meta){
                         if(type === 'display'){
-                            data = '<a href="{{ url('anakAsuh/download/') }}/' + row.id + '">' + data + '</a>';
+                            data = '<a href="{{ url('donasi/download/') }}/' + row.id + '">' + data + '</a>';
                         }
 
                         return data;
                     }
                 },
                 {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+            ],
+            columnDefs: [
+                {
+                    render: function ( data ) {
+                        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    },
+                    targets: [1]
+                }
+            ],
+            language: {
+                decimal: ",",
+                thousands: "."
+            }
         });
 
         function addForm() {
@@ -94,7 +108,7 @@
             $('input[name=_method]').val('PATCH');
             $('#modal-form form')[0].reset();
             $.ajax({
-                url: "{{ url('anakAsuh') }}" + '/' + id + "/edit",
+                url: "{{ url('donasi') }}" + '/' + id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function (data) {
@@ -102,9 +116,10 @@
                     $('.modal-title').text('Edit ' + fName);
 
                     $('#id').val(data.id);
-                    $('#no_reg').val(data.no_reg);
-                    $('#nama').val(data.nama);
+                    $('#nominal').val(data.nominal);
+                    $('#tgl_transfer').val(data.tgl_transfer);
                     $('#filename').val(data.filename);
+                    $('#donatur_id').val(data.donatur_id);
                 },
                 error: function () {
                     swal({
@@ -127,7 +142,7 @@
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: "{{ url('anakAsuh') }}" + '/' + id,
+                        url: "{{ url('donasi') }}" + '/' + id,
                         type: "POST",
                         data: {'_method': 'DELETE'},
                         success: function (data) {
@@ -158,9 +173,9 @@
                     let id = $('#id').val();
                     let url = null;
                     if (save_method == 'add')
-                        url = "{{ url('anakAsuh') }}";
+                        url = "{{ url('donasi') }}";
                     else
-                        url = "{{ url('anakAsuh') . '/' }}" + id;
+                        url = "{{ url('donasi') . '/' }}" + id;
 
                     $.ajax({
                         url: url,

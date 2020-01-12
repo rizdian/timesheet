@@ -59,7 +59,7 @@ class AnakAsuhController extends Controller
         $data->no_reg = $request->get('no_reg');
         $data->nama = $request->get('nama');
         $data->filename = time() . '-' . $request->filename->getClientOriginalName();
-
+        //move file to folder storage
         $request->filename->storeAs('anakAsuh', $data->filename);
 
         $data->save();

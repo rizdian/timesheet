@@ -153,6 +153,8 @@ return [
 
         Yajra\Datatables\DatatablesServiceProvider::class,
         JeroenNoten\LaravelAdminLte\ServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Jimmyjs\ReportGenerator\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -211,8 +213,11 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Datatables' => Yajra\Datatables\Facades\Datatables::class
-
+        'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PdfReport' => Jimmyjs\ReportGenerator\Facades\PdfReportFacade::class,
+        'ExcelReport' => Jimmyjs\ReportGenerator\Facades\ExcelReportFacade::class,
+        'CSVReport' => Jimmyjs\ReportGenerator\Facades\CSVReportFacade::class,
     ],
 
 ];

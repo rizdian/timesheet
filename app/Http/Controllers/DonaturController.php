@@ -152,9 +152,13 @@ class DonaturController extends Controller
     {
         $donaturs = Donatur::all();
         return DataTables::of($donaturs)
+            ->editColumn('tgl_lahir', function ($data) {
+                return date('d M Y', strtotime($data->tgl_lahir));
+            })
             ->addColumn('action', function ($data) {
                 return '<a onclick="editForm(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
-                    '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>';
+                    '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;' .
+                    '<a href="' . route('page.list.donatur-donasi', $data->id) . '" data-toggle="tooltip" class="btn btn-xs btn-info"> <i class="fa fa-hand-paper-o"></i> </a>';
             })
             ->make(true);
     }
@@ -166,5 +170,22 @@ class DonaturController extends Controller
     {
         $donaturs = Donatur::all();
         return $donaturs;
+    }
+
+    public function getPageListDonasi($id)
+    {
+        $donatur = Donatur::where('id', $id)->firstOrFail();
+        return view('donatur.list-donasi', compact('donatur'));
+    }
+
+    public function getListDonasi($id)
+    {
+        $donatur = Donatur::with('donasis')->where('id', $id)->firstOrFail();
+        return DataTables::of($donatur->donasis)
+            ->addIndexColumn()
+            ->editColumn('tgl_transfer', function ($data) {
+                return date('d F Y', strtotime($data->tgl_transfer));
+            })
+            ->make(true);
     }
 }
