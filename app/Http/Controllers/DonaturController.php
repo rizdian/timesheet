@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AnakAsuh;
 use App\Division;
 use App\Donatur;
 use Carbon\Carbon;
@@ -158,7 +159,8 @@ class DonaturController extends Controller
             ->addColumn('action', function ($data) {
                 return '<a onclick="editForm(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
                     '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;' .
-                    '<a href="' . route('page.list.donatur-donasi', $data->id) . '" data-toggle="tooltip" class="btn btn-xs btn-info"> <i class="fa fa-hand-paper-o"></i> </a>';
+                    '<a href="' . route('page.list.donatur-donasi', $data->id) . '" data-toggle="tooltip" class="btn btn-xs btn-info"> <i class="fa fa-hand-paper-o"></i> </a>&nbsp;&nbsp;' .
+                    '<a href="' . route('page.list.donatur-anakasuh', $data->id) . '" data-toggle="tooltip" class="btn btn-xs btn-warning"> <i class="fa fa-users"></i> </a>';
             })
             ->make(true);
     }
@@ -187,5 +189,27 @@ class DonaturController extends Controller
                 return date('d F Y', strtotime($data->tgl_transfer));
             })
             ->make(true);
+    }
+
+    public function getPageListAnakAsuh($id)
+    {
+        $donatur = Donatur::where('id', $id)->firstOrFail();
+
+        $lAnakAsuh = AnakAsuh::whereRaw('id not in (select a.id
+                   from anak_asuhs a
+                            inner join anak_asuh_donatur aad on a.id = aad.anak_asuh_id
+                            inner join donaturs d on aad.donatur_id = d.id
+                   where d.id = ' . $id . ')')->pluck('nama', 'id')->toArray();
+
+        return view('donatur.list-anakasuh', compact('donatur', 'lAnakAsuh'));
+    }
+
+    public function getListAnakAsuh($id)
+    {
+        $donatur = Donatur::with('anakasuhs')->where('id', $id)->firstOrFail();
+        return DataTables::of($donatur->anakasuhs)
+            ->addColumn('action', function ($data) {
+                return '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>';
+            })->make(true);
     }
 }

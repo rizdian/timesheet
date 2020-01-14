@@ -13,10 +13,10 @@ class CreateDonaturAnakAsuhTable extends Migration
      */
     public function up()
     {
-        Schema::create('donatur_anak_asuh', function (Blueprint $table) {
+        Schema::create('anak_asuh_donatur', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger("donatur_id");
             $table->unsignedInteger("anak_asuh_id");
+            $table->unsignedInteger("donatur_id");
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateDonaturAnakAsuhTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('donatur_anak_asuh');
+        Schema::dropIfExists('anak_asuh_donatur');
     }
 }

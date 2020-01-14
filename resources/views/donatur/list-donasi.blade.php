@@ -16,7 +16,7 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <div class="col-md-6">
-                            <h4><strong>Data Donasi Donatur {{ $donatur->nama }}</strong></h4>
+                            <h4>Data Donasi Donatur <strong>{{ $donatur->nama }}</strong></h4>
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -37,8 +37,6 @@
                 </div>
             </div>
         </div>
-
-        @include('donatur.form')
     </section>
 @stop
 
