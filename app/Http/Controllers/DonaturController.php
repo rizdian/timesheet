@@ -115,7 +115,6 @@ class DonaturController extends Controller
         $newDate = new Carbon($request->get('tgl_lahir'));
         $newDate->format('Y-m-d');
 
-        $donatur->nip = $request->get('nip');
         $donatur->nama = $request->get('nama');
         $donatur->tmpt_lahir = $request->get('tmpt_lahir');
         $donatur->tgl_lahir = $newDate;
