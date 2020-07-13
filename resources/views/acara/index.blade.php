@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Karyawan')
+@section('title', 'Donatur')
 
 @section('content_header')
 
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/adminlte/vendor/jquery-ui/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
 @stop
 
 @section('content')
@@ -17,7 +17,7 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <div class="col-md-6">
-                            <h4><strong>Data Karyawan</strong></h4>
+                            <h4><strong>Data Acara</strong></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <a onclick="addForm()" class="btn btn-success pull-right">Tambah</a>
@@ -30,12 +30,13 @@
                             <table class="table table-bordered" id="table">
                                 <thead>
                                 <tr>
-                                    <th>Nip</th>
                                     <th>Nama</th>
-                                    <th>Tempat Lahir</th>
-                                    <th>Tanggal Lahir</th>
-                                    <th>Alamat</th>
-                                    <th>Divisi</th>
+                                    <th>Deskripsi</th>
+                                    <th>Periode</th>
+                                    <th>Status</th>
+                                    <th>Verifikasi By</th>
+                                    <th>Verifikasi Date</th>
+                                    <th>Actual Donasi</th>
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
@@ -46,34 +47,39 @@
             </div>
         </div>
 
-        @include('employee.form')
+        @include('acara.form')
     </section>
 @stop
 
 @push('js')
-    <script src="{{ asset('vendor/adminlte/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
 
-        let fName = "Karyawan";
+        let fName = "Acara";
 
-        $('.datepicker').datepicker({dateFormat: 'dd-M-yy'});
+        $('.datepicker').datepicker({dateFormat: 'M-yy'});
 
         let table = $('#table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{!! route('data.employee') !!}',
+            ajax: '{!! route('data.acara') !!}',
             columns: [
-                {data: 'nip', name: 'nip'},
                 {data: 'nama', name: 'nama'},
-                {data: 'tmpt_lahir', name: 'tmpt_lahir'},
-                {data: 'tgl_lahir', name: 'tgl_lahir'},
-                {data: 'alamat', name: 'alamat'},
-                {data: 'division.nama', name: 'division.nama'},
+                {data: 'deskripsi', name: 'deskripsi'},
+                {data: 'periode', name: 'periode'},
+                {data: 'status', name: 'status'},
+                {data: 'verifikasi_by', name: 'verifikasi_by'},
+                {data: 'verifikasi_date', name: 'verifikasi_date'},
+                {data: 'actual_donasi', name: 'actual_donasi'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -91,7 +97,7 @@
             $('input[name=_method]').val('PATCH');
             $('#modal-form form')[0].reset();
             $.ajax({
-                url: "{{ url('employee') }}" + '/' + id + "/edit",
+                url: "{{ url('acara') }}" + '/' + id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function (data) {
@@ -99,12 +105,10 @@
                     $('.modal-title').text('Edit ' + fName);
 
                     $('#id').val(data.id);
-                    $('#nip').val(data.nip);
                     $('#nama').val(data.nama);
-                    $('#tmpt_lahir').val(data.tmpt_lahir);
-                    $('#tgl_lahir').val(data.tgl_lahir);
-                    $('#alamat').val(data.alamat);
-                    $('#division_id').val(data.division_id);
+                    $('#deskripsi').val(data.deskripsi);
+                    $('#periode').val(data.periode);
+                    $('#status').val(data.status);
                 },
                 error: function () {
                     swal({
@@ -127,7 +131,7 @@
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: "{{ url('employee') }}" + '/' + id,
+                        url: "{{ url('acara') }}" + '/' + id,
                         type: "POST",
                         data: {'_method': 'DELETE'},
                         success: function (data) {
@@ -158,9 +162,9 @@
                     let id = $('#id').val();
                     let url = null;
                     if (save_method == 'add')
-                        url = "{{ url('employee') }}";
+                        url = "{{ url('acara') }}";
                     else
-                        url = "{{ url('employee') . '/' }}" + id;
+                        url = "{{ url('acara') . '/' }}" + id;
 
                     $.ajax({
                         url: url,

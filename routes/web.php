@@ -66,4 +66,11 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
     Route::get('data/user', 'UserController@getData')->name('data.user');
     Route::post('change-role/{id}','UserController@changeRole')->name('change.role');
+
+    Route::resource('acara', 'AcaraController', [
+        'except' => ['create', 'show']
+    ]);
+    Route::get('data/acara', 'AcaraController@getData')->name('data.acara');
+    Route::get('acara/{id}/donasi', 'AcaraController@getPageListDonasi')->name('page.list.acara-donasi');
+    Route::get('data/{id}/acara-donasi', 'AcaraController@getListDonasi')->name('list.acara-donasi');
 });

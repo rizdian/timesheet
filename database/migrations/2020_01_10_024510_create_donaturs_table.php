@@ -16,12 +16,10 @@ class CreateDonatursTable extends Migration
         Schema::create('donaturs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nama', 50);
-            $table->string('tmpt_lahir', 30);
-            $table->date('tgl_lahir');
-            $table->longText('alamat');
             $table->string('no_telp', 15);
             $table->string('email', 100);
-
+            $table->integer('no_rek');
+            $table->string('nama_bank', 50);
             $table->timestamps();
         });
     }

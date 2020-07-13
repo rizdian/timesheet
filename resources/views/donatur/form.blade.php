@@ -20,20 +20,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="tmpt_lahir" class="col-md-3 control-label">Tempat Lahir</label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" id="tmpt_lahir" name="tmpt_lahir" maxlength="30" required/>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="tgl_lahir" class="col-md-3 control-label">Tanggal Lahir</label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control datepicker" id="tgl_lahir" name="tgl_lahir" required/>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label for="nip" class="col-md-3 control-label">No Telp</label>
                         <div class="col-md-6">
                             <input type="text" class="form-control" id="no_telp" name="no_telp" maxlength="15" required/>
@@ -48,9 +34,16 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="alamat" class="col-md-3 control-label">Alamat</label>
+                        <label for="nip" class="col-md-3 control-label">No Rekening</label>
                         <div class="col-md-6">
-                            <textarea name="alamat" id="alamat" cols="53" rows="10"></textarea>
+                            <input type="text" class="form-control" id="no_rek" name="no_rek" maxlength="20" required/>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nip" class="col-md-3 control-label">Nama Bank</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="nama_bank" name="nama_bank" maxlength="50" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

@@ -14,17 +14,27 @@ class RoleTableSeeder extends Seeder
     {
         $role_manager = new Role();
         $role_manager->name = 'super_admin';
-        $role_manager->description = 'A Super Admin';
+        $role_manager->description = 'Super Admin';
         $role_manager->save();
 
         $role_employee = new Role();
         $role_employee->name = 'user';
-        $role_employee->description = 'A User Normal';
+        $role_employee->description = 'User Normal';
         $role_employee->save();
 
         $role_manager = new Role();
         $role_manager->name = 'admin';
-        $role_manager->description = 'A Admin User';
+        $role_manager->description = 'Admin User';
+        $role_manager->save();
+
+        $role_manager = new Role();
+        $role_manager->name = 'manager';
+        $role_manager->description = 'Managerial User';
+        $role_manager->save();
+
+        $role_manager = new Role();
+        $role_manager->name = 'finance';
+        $role_manager->description = 'Financial User';
         $role_manager->save();
     }
 }

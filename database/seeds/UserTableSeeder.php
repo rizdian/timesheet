@@ -16,12 +16,13 @@ class UserTableSeeder extends Seeder
         $role_su = Role::where('name', 'super_admin')->first();
         $role_admin = Role::where('name', 'admin')->first();
         $role_user = Role::where('name', 'user')->first();
+        $role_manager = Role::where('name', 'manager')->first();
+        $role_finance = Role::where('name', 'finance')->first();
 
         $employee = new User();
         $employee->name = 'Super Admin Name';
         $employee->email = 'su@example.com';
         $employee->password = bcrypt('password');
-        $employee->employee_id = 1;
         $employee->save();
         $employee->roles()->attach($role_su);
 
@@ -29,7 +30,6 @@ class UserTableSeeder extends Seeder
         $employee->name = 'Admin Name';
         $employee->email = 'admin@example.com';
         $employee->password = bcrypt('password');
-        $employee->employee_id = 2;
         $employee->save();
         $employee->roles()->attach($role_admin);
 
@@ -37,9 +37,22 @@ class UserTableSeeder extends Seeder
         $employee->name = 'User Name';
         $employee->email = 'user@example.com';
         $employee->password = bcrypt('password');
-        $employee->employee_id = 3;
         $employee->save();
         $employee->roles()->attach($role_user);
+
+        $employee = new User();
+        $employee->name = 'Manager Name';
+        $employee->email = 'manage@example.com';
+        $employee->password = bcrypt('password');
+        $employee->save();
+        $employee->roles()->attach($role_manager);
+
+        $employee = new User();
+        $employee->name = 'Manager Name';
+        $employee->email = 'manage@example.com';
+        $employee->password = bcrypt('password');
+        $employee->save();
+        $employee->roles()->attach($role_finance);
 
     }
 }

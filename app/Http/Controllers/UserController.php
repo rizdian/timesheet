@@ -36,14 +36,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $lKry = DB::table('employees')
-            ->select('employees.id', 'nama')
-            ->leftJoin('users', 'employees.id', 'users.employee_id')
-            ->whereNull('users.employee_id')
-            ->get()->toArray();
+        $luser = User::all();
 
         $lRole = Role::pluck('description','id')->toArray();
-        return view('user.index', compact(['lKry','lRole']));
+        return view('user.index', compact(['luser','lRole']));
     }
 
     /**
@@ -65,15 +61,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'employee_id' => 'required',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|confirmed',
         ]);
 
         $user = User::create([
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password')),
-            'employee_id' => $request->get('employee_id')
+            'name' => $request->get('name')
         ]);
         $user
             ->roles()
@@ -116,7 +111,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|confirmed',
         ]);
 
         $user->password = bcrypt($request->get('password'));
@@ -150,7 +145,7 @@ class UserController extends Controller
      */
     public function getData()
     {
-        $user = User::with('employee', 'roles')->get();
+        $user = User::with('roles')->get();
         return DataTables::of($user)
             ->addColumn('action', function ($data) {
                 return '<a onclick="editForm(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i> Change Password</a>&nbsp;&nbsp;' .

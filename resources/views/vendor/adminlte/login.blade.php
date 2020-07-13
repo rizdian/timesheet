@@ -43,7 +43,7 @@
                     <div class="col-xs-8">
                         <div class="checkbox icheck">
                             <label>
-                                <input type="checkbox" name="remember"> {{ trans('adminlte::adminlte.remember_me') }}
+                                {{--<input type="checkbox" name="remember"> {{ trans('adminlte::adminlte.remember_me') }}--}}
                             </label>
                         </div>
                     </div>

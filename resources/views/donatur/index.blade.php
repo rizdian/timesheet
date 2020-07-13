@@ -31,10 +31,10 @@
                                 <thead>
                                 <tr>
                                     <th>Nama</th>
-                                    <th>Tempat Lahir</th>
-                                    <th>Tanggal Lahir</th>
                                     <th>No Telp</th>
                                     <th>Email</th>
+                                    <th>No Rekening</th>
+                                    <th>Nama Bank</th>
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
@@ -52,6 +52,10 @@
 @push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -68,10 +72,10 @@
             ajax: '{!! route('data.donatur') !!}',
             columns: [
                 {data: 'nama', name: 'nama'},
-                {data: 'tmpt_lahir', name: 'tmpt_lahir'},
-                {data: 'tgl_lahir', name: 'tgl_lahir'},
                 {data: 'no_telp', name: 'no_telp'},
                 {data: 'email', name: 'email'},
+                {data: 'no_rek', name: 'no_rek'},
+                {data: 'nama_bank', name: 'nama_bank'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -98,11 +102,10 @@
 
                     $('#id').val(data.id);
                     $('#nama').val(data.nama);
-                    $('#tmpt_lahir').val(data.tmpt_lahir);
-                    $('#tgl_lahir').val(data.tgl_lahir);
                     $('#no_telp').val(data.no_telp);
                     $('#email').val(data.email);
-                    $('#alamat').val(data.alamat);
+                    $('#no_rek').val(data.no_rek);
+                    $('#nama_bank').val(data.nama_bank);
                 },
                 error: function () {
                     swal({

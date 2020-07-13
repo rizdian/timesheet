@@ -23,9 +23,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="nama" class="col-md-3 control-label">Nominal</label>
+                        <label for="nominal" class="col-md-3 control-label">Nominal</label>
                         <div class="col-md-6">
                             <input type="number" class="form-control" id="nominal" name="nominal" required/>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="type" class="col-md-3 control-label">Type</label>
+                        <div class="col-md-6">
+                            <select name="type" id="type">
+                                <option value="cash">Cash</option>
+                                <option value="transfer">Transfer</option>
+                            </select>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

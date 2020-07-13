@@ -60,7 +60,7 @@
             serverSide: true,
             ajax: '{!! route('data.user') !!}',
             columns: [
-                {data: 'employee.nama', name: 'employee.nama'},
+                {data: 'name', name: 'name'},
                 {data: 'email', name: 'email'},
                 {data: 'roles[0].description', name: 'roles[0].description'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}

@@ -54,23 +54,28 @@ class DonasiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'donatur_id' => 'required|integer',
+            'acara_id' => 'required|integer',
             'nominal' => 'required|integer',
-            'tgl_transfer' => 'required|date',
-            'filename' => 'required',
-            'donatur_id' => 'required',
+            'type' => 'required',
         ]);
 
-        $newDate = new Carbon($request->get('tgl_transfer'));
-        $newDate->format('Y-m-d');
+
 
         $data = new Donasi();
-        $data->nominal = $request->get('nominal');
-        $data->tgl_transfer = $newDate;
+        $data->acara_id = $request->get('acara_id');
         $data->donatur_id = $request->get('donatur_id');
+        $data->nominal = $request->get('nominal');
+        $data->type = $request->get('type');
 
-        $data->filename = time() . '-' . $data->donatur_id . "." . $request->filename->getClientOriginalExtension();
-        //move file to folder storage
-        $request->filename->storeAs('donasi', $data->filename);
+        if ($request->get('tgl_transfer') != null){
+            $newDate = new Carbon($request->get('tgl_transfer'));
+            $newDate->format('Y-m-d');
+            $data->tgl_transfer = $newDate;
+            $data->filename = time() . '-' . $data->donatur_id . "." . $request->filename->getClientOriginalExtension();
+            //move file to folder storage
+            $request->filename->storeAs('donasi', $data->filename);
+        }
 
         $data->save();
 
@@ -138,6 +143,7 @@ class DonasiController extends Controller
      */
     public function destroy(Donasi $donasi)
     {
+        Storage::delete('donasi/' . $donasi->filename);
         $donasi->delete();
         return response()->json([
             'success' => true,

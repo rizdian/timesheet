@@ -14,11 +14,7 @@
                     <div class="form-group">
                         <label for="nama" class="col-md-3 control-label">Nama</label>
                         <div class="col-md-6">
-                            <select class="form-control" id="employee_id" name="employee_id" required>
-                                @foreach($lKry as $key => $kry)
-                                    <option value="{{ $kry->id }}">{{ $kry->nama }}</option>
-                                @endforeach
-                            </select>
+							<input type="text" class="form-control" id="name" name="name" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

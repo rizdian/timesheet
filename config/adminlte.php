@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'Aplikasi Pengajuan Insentif',
+    'title' => 'Aplikasi Rekap Donasi',
 
     'title_prefix' => '',
 
@@ -110,16 +110,26 @@ return [
     'menu' => [
         'MAIN NAVIGATION',
         [
+            'text'        => 'Acara',
+            'url'         => 'acara',
+            'icon'        => 'heart',
+        ],
+        /*[
             'text'        => 'Donasi',
             'url'         => 'donasi',
             'icon'        => 'money',
-        ],
+        ],*/
         [
             'text'        => 'Laporan Donasi',
             'url'         => 'rekap/donasi',
             'icon'        => 'line-chart',
         ],
-        'DATA MASTER',
+        [
+            'text'        => 'Donatur',
+            'url'         => 'donatur',
+            'icon'        => 'users',
+        ],
+        /*'DATA MASTER',
         [
             'text'        => 'Donatur',
             'url'         => 'donatur',
@@ -129,7 +139,7 @@ return [
             'text'        => 'Anak Asuh',
             'url'         => 'anakAsuh',
             'icon'        => 'address-card-o',
-        ],
+        ],*/
         'ACCOUNT SETTINGS',
         [
             'text' => 'User Login',

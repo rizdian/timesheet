@@ -15,14 +15,31 @@
                     <div class="form-group">
                         <label for="nama" class="col-md-3 control-label">Nama</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="nama" name="nama" maxlength="20" required/>
+                            <input type="text" class="form-control" id="nama" name="nama" maxlength="50" required/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="harga" class="col-md-3 control-label">Harga</label>
+                        <label for="tmpt_lahir" class="col-md-3 control-label">Deskripsi</label>
                         <div class="col-md-6">
-                            <input type="number" class="form-control" id="harga" name="harga" max="2000000" required/>
+                            <textarea name="deskripsi" id="deskripsi" cols="53" rows="10"></textarea>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tgl_lahir" class="col-md-3 control-label">Periode</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control datepicker" id="periode" name="periode" required readonly/>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="role_id" class="col-md-3 control-label">Status</label>
+                        <div class="col-md-6">
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="aktif">Aktif</option>
+                                <option value="tidak_aktif">Tidak Aktif</option>
+                            </select>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
