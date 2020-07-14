@@ -131,6 +131,8 @@ class DonaturController extends Controller
      */
     public function destroy(Donatur $donatur)
     {
+        Auth::user()->authorizeRoles(['super_admin', 'admin']);
+
         $donatur->delete();
         return response()->json([
             'success' => true,

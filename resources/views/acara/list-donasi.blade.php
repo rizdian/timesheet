@@ -37,12 +37,14 @@
                                     <th>Tanggal Input</th>
                                     <th>Bukti Transfer</th>
                                     <th>Tanggal Transfer</th>
+                                    <th>Verifikasi Transfer</th>
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
                                     <th colspan="2" style="text-align:right">Total:</th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -59,6 +61,7 @@
         </div>
 
         @include('acara.form-add-donasi')
+        @include('acara.form-verifikasi')
     </section>
 @stop
 
@@ -114,18 +117,19 @@
                 {
                     "data": "filename",
                     "render": function (data, type, row, meta) {
-                        if (data != null) {
+                        if (data != "-") {
                             if (type === 'display') {
                                 data = '<a href="{{ url('donasi/download/') }}/' + row.id + '">' + data + '</a>';
                             }
                             return data;
                         } else {
-                            return null;
+                            return data;
                         }
 
                     }
                 },
                 {data: 'tgl_transfer', name: 'tgl_transfer'},
+                {data: 'verifikasi', name: 'verifikasi'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [
@@ -153,7 +157,7 @@
                     .data()
                     .reduce(function (a, b) {
                         return intVal(a) + intVal(b);
-                    }, 0)/1000).toFixed(3);
+                    }, 0) / 1000).toFixed(3);
 
                 // Total over this page
                 pageTotal = (api
@@ -161,7 +165,7 @@
                     .data()
                     .reduce(function (a, b) {
                         return intVal(a) + intVal(b);
-                    }, 0)/1000).toFixed(3);
+                    }, 0) / 1000).toFixed(3);
 
                 // Update footer
                 $(api.column(2).footer()).html(
@@ -239,20 +243,58 @@
                                 icon: "success",
                             });
                         },
-                        error: function () {
+                        error: function (request, status, error) {
                             swal({
                                 title: 'Oops...',
-                                text: data.message,
+                                text: error,
                                 type: 'error',
                                 timer: '1500'
                             })
                         }
                     });
-
                 } else {
                     swal("Dibatalkan!");
                 }
             });
+        }
+
+        function verifikasiData(id) {
+            swal({
+                title: "Apakah anda yakin?",
+                text: "Data " + fName + " ini akan di verifikasi!",
+                icon: "warning",
+                buttons: true,
+            }).then((willVerifikasi) => {
+                if (willVerifikasi) {
+                    $.ajax({
+                        url: "{{ url('verifikasi-donasi') }}" + '/' + id,
+                        type: "POST",
+                        success: function (data) {
+                            table.ajax.reload();
+                            swal("Data " + fName + " Telah diverifikasi!", {
+                                icon: "success",
+                            });
+                        },
+                        error: function (request, status, error) {
+                            swal({
+                                title: 'Oops...',
+                                text: error,
+                                type: 'error',
+                                timer: '1500'
+                            })
+                        }
+                    });
+                } else {
+                    swal("Dibatalkan!");
+                }
+            });
+        }
+
+        function verifikasiDetail(filter) {
+            $('#modal-verifikasi').modal('show');
+            $('#modal-verifikasi form')[0].reset();
+            $('#vDate').val($(filter).data("date"));
+            $('#vBy').val($(filter).data("by"));
         }
     </script>
 @endpush

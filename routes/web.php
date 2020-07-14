@@ -50,6 +50,7 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
     Route::get('data/donasi', 'DonasiController@getData')->name('data.donasi');
     Route::get('list/donasi', 'DonasiController@getList')->name('list.donasi');
+    Route::post('verifikasi-donasi/{id}', 'DonasiController@verifikasi')->name('verifikasi.donasi');
     Route::get('donasi/download/{filename}', 'DonasiController@downloadBukti');
 
     //REKAP DONASI

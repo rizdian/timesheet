@@ -19,6 +19,9 @@ class CreateDonasisTable extends Migration
             $table->date('tgl_transfer');
             $table->longText('filename')->nullable();
             $table->enum('type', ['cash','transfer']);
+            $table->boolean('verifikasi')->nullable();
+            $table->dateTime('verifikasi_date')->nullable();
+            $table->string('verifikasi_by')->nullable();
 
             $table->timestamps();
             $table->unsignedInteger("donatur_id");

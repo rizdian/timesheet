@@ -23,11 +23,6 @@ class DonasiController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(function ($request, $next) {
-            $this->user = Auth::user();
-            $request->user()->authorizeRoles(['super_admin', 'admin']);
-            return $next($request);
-        });
     }
 
     /**
@@ -61,14 +56,17 @@ class DonasiController extends Controller
         ]);
 
 
-
         $data = new Donasi();
         $data->acara_id = $request->get('acara_id');
         $data->donatur_id = $request->get('donatur_id');
         $data->nominal = $request->get('nominal');
         $data->type = $request->get('type');
+        if ($data->type == "cash")
+            $data->verifikasi = true;
+        else
+            $data->verifikasi = false;
 
-        if ($request->get('tgl_transfer') != null){
+        if ($request->get('tgl_transfer') != null) {
             $newDate = new Carbon($request->get('tgl_transfer'));
             $newDate->format('Y-m-d');
             $data->tgl_transfer = $newDate;
@@ -143,6 +141,8 @@ class DonasiController extends Controller
      */
     public function destroy(Donasi $donasi)
     {
+        Auth::user()->authorizeRoles(['super_admin', 'admin']);
+
         Storage::delete('donasi/' . $donasi->filename);
         $donasi->delete();
         return response()->json([
@@ -182,5 +182,20 @@ class DonasiController extends Controller
     {
         $data = Donasi::select('filename')->where('id', $id)->first();
         return Storage::download('donasi/' . $data->filename);
+    }
+
+    public function verifikasi($id){
+        $data = Donasi::findOrFail($id);
+        $data->verifikasi = true;
+
+        $newDate = new Carbon();
+        $newDate->format('Y-m-d');
+        $data->verifikasi_date = $newDate;
+        $data->verifikasi_by = Auth::user()['name'];
+        $data->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data ' . $this->className . ' Telah Diverifikasi'
+        ]);
     }
 }

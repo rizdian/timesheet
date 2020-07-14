@@ -19,8 +19,8 @@ class CreateAcarasTable extends Migration
             $table->text('deskripsi');
             $table->date('periode');
             $table->enum('status', ['aktif','tidak_aktif','verifikasi']);
-            $table->string('verifikasi_by')->nullable();
-            $table->dateTime('verifikasi_date')->nullable();
+            $table->string('closing_by')->nullable();
+            $table->dateTime('closing_date')->nullable();
             $table->bigInteger('actual_donasi')->nullable();
             $table->timestamps();
         });

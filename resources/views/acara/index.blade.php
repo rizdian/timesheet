@@ -34,8 +34,8 @@
                                     <th>Deskripsi</th>
                                     <th>Periode</th>
                                     <th>Status</th>
-                                    <th>Verifikasi By</th>
-                                    <th>Verifikasi Date</th>
+                                    <th>Closing By</th>
+                                    <th>Closing Date</th>
                                     <th>Actual Donasi</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -77,8 +77,8 @@
                 {data: 'deskripsi', name: 'deskripsi'},
                 {data: 'periode', name: 'periode'},
                 {data: 'status', name: 'status'},
-                {data: 'verifikasi_by', name: 'verifikasi_by'},
-                {data: 'verifikasi_date', name: 'verifikasi_date'},
+                {data: 'closing_by', name: 'closing_by'},
+                {data: 'closing_date', name: 'closing_date'},
                 {data: 'actual_donasi', name: 'actual_donasi'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]

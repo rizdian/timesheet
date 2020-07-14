@@ -8,7 +8,6 @@ use App\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class AcaraController extends Controller
@@ -54,7 +53,7 @@ class AcaraController extends Controller
             'status' => 'required',
         ]);
 
-        $newDate = new Carbon($request->get('periode')) ;
+        $newDate = new Carbon($request->get('periode'));
         $newDate->format('Y-m-d');
 
         $data = new Acara();
@@ -125,6 +124,8 @@ class AcaraController extends Controller
      */
     public function destroy(Acara $acara)
     {
+        Auth::user()->authorizeRoles(['super_admin', 'admin']);
+
         $acara->delete();
         return response()->json([
             'success' => true,
@@ -163,16 +164,52 @@ class AcaraController extends Controller
         $acara = Acara::with('donasis', 'donasis.donatur')->where('id', $id)->firstOrFail();
         return DataTables::of($acara->donasis)
             ->addIndexColumn()
+            ->editColumn('filename', function ($data) {
+                if ($data->type == "transfer") {
+                    return $data->filename;
+                } else {
+                    return "-";
+                }
+
+            })
             ->editColumn('tgl_transfer', function ($data) {
-                if ($data->tgl_transfer != null) {
-                    return date('d F Y', strtotime($data->tgl_transfer));
+                if ($data->type == "transfer") {
+                    if ($data->tgl_transfer != null) {
+                        return date('d F Y', strtotime($data->tgl_transfer));
+                    }
+                } else {
+                    return "-";
+                }
+
+            })
+            ->editColumn('verifikasi', function ($data) {
+                if ($data->type == "transfer") {
+                    if ($data->verifikasi == 1)
+                        return "verifikasi";
+                    else
+                        return "pending";
+                } else {
+                    return "-";
                 }
             })
             ->editColumn('created_at', function ($data) {
                 return date('d F Y  H:i', strtotime($data->created_at));
             })
             ->addColumn('action', function ($data) {
-                    return '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"  title="Hapus Donasi"> <i class="fa fa-close"></i> </a>';
+                $ver = "";
+                $detail = "";
+                if ($data->type == 'transfer'){
+                    $vDate = $data->verifikasi_date != null ? date('d F Y  H:i', strtotime($data->verifikasi_date)) : "";
+                    $vBy = $data->verifikasi_by;
+
+                    $ver = '<a onclick="verifikasiData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-success"  title="Verifikasi Donasi"> <i class="fa fa-check-circle"></i> </a>';
+
+                    if ($data->verifikasi == 1)
+                        $ver = '<a onclick="verifikasiDetail(this)" data-date="'.$vDate.'" data-by="'.$vBy.'" data-toggle="tooltip" class="btn btn-xs btn-primary"  title="Detail Verifikasi"> <i class="fa fa-info-circle"></i> </a>';
+                }
+
+
+                return '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"  title="Hapus Donasi"> <i class="fa fa-close"></i> </a>' . $ver . $detail;
             })
             ->make(true);
     }
