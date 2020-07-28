@@ -74,4 +74,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('data/acara', 'AcaraController@getData')->name('data.acara');
     Route::get('acara/{id}/donasi', 'AcaraController@getPageListDonasi')->name('page.list.acara-donasi');
     Route::get('data/{id}/acara-donasi', 'AcaraController@getListDonasi')->name('list.acara-donasi');
+    Route::post('close-acara/{id}', 'AcaraController@getCloseDonasi');
 });

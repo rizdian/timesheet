@@ -139,15 +139,34 @@ class AcaraController extends Controller
      */
     public function getData()
     {
-        $acaras = Acara::all();
+        $acaras = Acara::withCount('donasis')->get();
         return DataTables::of($acaras)
             ->editColumn('periode', function ($data) {
                 return date('F Y', strtotime($data->periode));
             })
+            ->addColumn('jumlah_donasi', function ($data) {
+                return $data->donasis_count;
+            })
             ->addColumn('action', function ($data) {
-                return '<a href="' . route('page.list.acara-donasi', $data->id) . '" data-toggle="tooltip" title="Tambah Donasi" class="btn btn-xs btn-success"> <i class="fa fa-money"></i></a>&nbsp;&nbsp;' .
-                    '<a onclick="editForm(' . $data->id . ')" data-toggle="tooltip" title="Ubah" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
-                    '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" title="Hapus" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>';
+                $isDeleteDisable = "onclick='deleteData(" . $data->id . ")'";
+                if ($data->donasis_count > 0) {
+                    $isDeleteDisable = "disabled";
+                }
+                $delete = '<a data-toggle="tooltip" title="Hapus" class="btn btn-xs btn-danger" ' . $isDeleteDisable . '> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;';
+
+                $isClosingDisable = "onclick='closeForm(" . $data->id . ")'";
+                $isEditDisable = "onclick='editForm(" . $data->id . ")'";
+                $isTambahDisable = "href='" . route('page.list.acara-donasi', $data->id) . "'";
+                if ($data->closing_date != null) {
+                    $isClosingDisable = "disabled";
+                    $isEditDisable = "disabled";
+                    $isTambahDisable = "disabled";
+                }
+                $close = '<a data-toggle="tooltip" title="Close" class="btn btn-xs btn-warning" ' . $isClosingDisable . '> <i class="fa fa-inbox"></i></a>&nbsp;&nbsp;';
+                $edit = '<a data-toggle="tooltip" title="Ubah" class="btn btn-xs btn-primary" ' . $isEditDisable . '> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;';
+                $tambah = '<a data-toggle="tooltip" title="Tambah Donasi" class="btn btn-xs btn-success" ' . $isTambahDisable . '> <i class="fa fa-money"></i></a>&nbsp;&nbsp;';
+
+                return $tambah . $edit . $delete . $close;
             })
             ->make(true);
     }
@@ -198,19 +217,40 @@ class AcaraController extends Controller
             ->addColumn('action', function ($data) {
                 $ver = "";
                 $detail = "";
-                if ($data->type == 'transfer'){
+                if ($data->type == 'transfer') {
                     $vDate = $data->verifikasi_date != null ? date('d F Y  H:i', strtotime($data->verifikasi_date)) : "";
                     $vBy = $data->verifikasi_by;
 
                     $ver = '<a onclick="verifikasiData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-success"  title="Verifikasi Donasi"> <i class="fa fa-check-circle"></i> </a>';
 
                     if ($data->verifikasi == 1)
-                        $ver = '<a onclick="verifikasiDetail(this)" data-date="'.$vDate.'" data-by="'.$vBy.'" data-toggle="tooltip" class="btn btn-xs btn-primary"  title="Detail Verifikasi"> <i class="fa fa-info-circle"></i> </a>';
+                        $ver = '<a onclick="verifikasiDetail(this)" data-date="' . $vDate . '" data-by="' . $vBy . '" data-toggle="tooltip" class="btn btn-xs btn-primary"  title="Detail Verifikasi"> <i class="fa fa-info-circle"></i> </a>';
                 }
 
 
                 return '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"  title="Hapus Donasi"> <i class="fa fa-close"></i> </a>' . $ver . $detail;
             })
             ->make(true);
+    }
+
+    public function getCloseDonasi($id, Request $request)
+    {
+        $request->validate(['total' => 'required|numeric']);
+
+        $data = Acara::find($id);
+
+        $newDate = new Carbon();
+        $newDate->format('Y-m-d');
+
+        $data->actual_donasi = $request->get("total");
+        $data->closing_by = Auth::user()['name'];
+        $data->closing_date = $newDate;
+        $data->status = "closing";
+        $data->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data ' . $this->className . ' Telah Di-Closing'
+        ]);
     }
 }

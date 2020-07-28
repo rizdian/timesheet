@@ -8,6 +8,11 @@
 
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <style>
+        .ui-datepicker-calendar {
+            display: none;
+        }
+    </style>
 @stop
 
 @section('content')
@@ -37,6 +42,7 @@
                                     <th>Closing By</th>
                                     <th>Closing Date</th>
                                     <th>Actual Donasi</th>
+                                    <th>Jumlah Donasi</th>
                                     <th>Aksi</th>
                                 </tr>
                                 </thead>
@@ -54,7 +60,17 @@
 @push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
+            $('.date-picker').datepicker( {
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'MM yy',
+                onClose: function(dateText, inst) {
+                    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+                }
+            });
+
             $('[data-toggle="tooltip"]').tooltip();
         });
 
@@ -79,7 +95,8 @@
                 {data: 'status', name: 'status'},
                 {data: 'closing_by', name: 'closing_by'},
                 {data: 'closing_date', name: 'closing_date'},
-                {data: 'actual_donasi', name: 'actual_donasi'},
+                {data: 'actual_donasi', name: 'actual_donasi' , render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: 'jumlah_donasi', name: 'jumlah_donasi'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -150,6 +167,50 @@
                         }
                     });
 
+                } else {
+                    swal("Dibatalkan!");
+                }
+            });
+        }
+
+        function closeForm(id) {
+            swal({
+                content: {
+                    element: "input",
+                    attributes: {
+                        placeholder: "Masukan Total Donasi yang diterima!",
+                        type: "input",
+                    },
+                },
+                icon: "info",
+                buttons: true,
+            }).then((isTotal) => {
+                if (isTotal) {
+                    $.ajax({
+                        url: "{{ url('close-acara') . '/' }}" + id,
+                        type: "POST",
+                        dataType: 'json',
+                        data: { "total": isTotal },
+                        success: function (data) {
+                            $('#modal-form').modal('hide');
+                            table.ajax.reload();
+                            swal({
+                                title: 'Success!',
+                                icon: "success",
+                                text: data.message,
+                                timer: '1500'
+                            })
+                        },
+                        error: function (xhr, status, error) {
+                            let err = JSON.parse(xhr.responseText);
+                            swal({
+                                title: 'Oops...',
+                                text: "Kesalahan Input Data",
+                                icon: 'error',
+                                timer: '1500'
+                            })
+                        }
+                    });
                 } else {
                     swal("Dibatalkan!");
                 }
