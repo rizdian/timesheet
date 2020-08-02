@@ -7,7 +7,6 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
 @stop
 
 @section('content')
@@ -27,21 +26,15 @@
                     <form role="form" method="POST" action="{{route('post.rekap.donasi')}}">
                         @csrf
                         <div class="box-body">
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="from_date" class="col-md-3 control-label">From</label>
-                                        <input type="text" class="form-control datepicker" id="from_date"
-                                               name="from_date" required readonly/>
-                                        <span class="help-block with-errors"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="to_date" class="col-md-3 control-label">To</label>
-                                        <input type="text" class="form-control datepicker" id="to_date"
-                                               name="to_date" required readonly/>
-                                        <span class="help-block with-errors"></span>
+                                        <label for="acara_id" class="col-md-3 control-label">Nama Acara</label>
+                                        <select class="form-control" id="acara_id" name="acara_id" required>
+                                            @foreach($lacara as $key => $name)
+                                                <option value="{{ $key }}">{{ $name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -57,8 +50,4 @@
 @stop
 
 @push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script>
-        $('.datepicker').datepicker({dateFormat: 'dd-M-yy'});
-    </script>
 @endpush
