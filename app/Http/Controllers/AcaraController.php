@@ -101,7 +101,7 @@ class AcaraController extends Controller
             'status' => 'required',
         ]);
 
-        $newDate = new Carbon($request->get('tgl_transfer'));
+        $newDate = new Carbon($request->get('periode'));
         $newDate->format('Y-m-d');
 
         $acara->nama = $request->get('nama');
@@ -160,7 +160,6 @@ class AcaraController extends Controller
                 if ($data->closing_date != null) {
                     $isClosingDisable = "disabled";
                     $isEditDisable = "disabled";
-                    $isTambahDisable = "disabled";
                 }
                 $close = '<a data-toggle="tooltip" title="Close" class="btn btn-xs btn-warning" ' . $isClosingDisable . '> <i class="fa fa-inbox"></i></a>&nbsp;&nbsp;';
                 $edit = '<a data-toggle="tooltip" title="Ubah" class="btn btn-xs btn-primary" ' . $isEditDisable . '> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;';
@@ -178,9 +177,13 @@ class AcaraController extends Controller
         return view('acara.list-donasi', compact('acara', 'lDonatur'));
     }
 
-    public function getListDonasi($id)
-    {
+    public function getListDonasi($id){
         $acara = Acara::with('donasis', 'donasis.donatur')->where('id', $id)->firstOrFail();
+        $sttsAcara = false;
+        if ($acara->status == 'aktif') {
+            $sttsAcara = true;
+        }
+
         return DataTables::of($acara->donasis)
             ->addIndexColumn()
             ->editColumn('filename', function ($data) {
@@ -195,11 +198,12 @@ class AcaraController extends Controller
                 if ($data->type == "transfer") {
                     if ($data->tgl_transfer != null) {
                         return date('d F Y', strtotime($data->tgl_transfer));
+                    } else {
+                        return "-";
                     }
                 } else {
                     return "-";
                 }
-
             })
             ->editColumn('verifikasi', function ($data) {
                 if ($data->type == "transfer") {
@@ -214,9 +218,10 @@ class AcaraController extends Controller
             ->editColumn('created_at', function ($data) {
                 return date('d F Y  H:i', strtotime($data->created_at));
             })
-            ->addColumn('action', function ($data) {
+            ->addColumn('action', function ($data) use ($sttsAcara) {
                 $ver = "";
                 $detail = "";
+                $del = "";
                 if ($data->type == 'transfer') {
                     $vDate = $data->verifikasi_date != null ? date('d F Y  H:i', strtotime($data->verifikasi_date)) : "";
                     $vBy = $data->verifikasi_by;
@@ -227,22 +232,22 @@ class AcaraController extends Controller
                         $ver = '<a onclick="verifikasiDetail(this)" data-date="' . $vDate . '" data-by="' . $vBy . '" data-toggle="tooltip" class="btn btn-xs btn-primary"  title="Detail Verifikasi"> <i class="fa fa-info-circle"></i> </a>';
                 }
 
+                if ($sttsAcara) {
+                    $del = '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"  title="Hapus Donasi"> <i class="fa fa-close"></i> </a>';
+                }
 
-                return '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" class="btn btn-xs btn-danger"  title="Hapus Donasi"> <i class="fa fa-close"></i> </a>' . $ver . $detail;
+                return $del . $ver . $detail;
             })
             ->make(true);
     }
 
     public function getCloseDonasi($id, Request $request)
     {
-        $request->validate(['total' => 'required|numeric']);
-
         $data = Acara::find($id);
 
         $newDate = new Carbon();
         $newDate->format('Y-m-d');
 
-        $data->actual_donasi = $request->get("total");
         $data->closing_by = Auth::user()['name'];
         $data->closing_date = $newDate;
         $data->status = "closing";

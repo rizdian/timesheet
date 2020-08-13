@@ -153,8 +153,8 @@ class DonaturController extends Controller
             })
             ->addColumn('action', function ($data) {
                 return '<a onclick="editForm(' . $data->id . ')" data-toggle="tooltip" title="Ubah" class="btn btn-xs btn-primary"> <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;' .
-                    '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" title="Hapus" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;' .
-                    '<a href="' . route('page.list.donatur-donasi', $data->id) . '" data-toggle="List Donasi" title="List Donasi!" class="btn btn-xs btn-info"> <i class="fa fa-hand-paper-o"></i> </a>&nbsp;&nbsp;' ;
+                    '<a onclick="deleteData(' . $data->id . ')" data-toggle="tooltip" title="Hapus" class="btn btn-xs btn-danger"> <i class="fa fa-close"></i> </a>&nbsp;&nbsp;' ;
+//                    '<a href="' . route('page.list.donatur-donasi', $data->id) . '" data-toggle="List Donasi" title="List Donasi!" class="btn btn-xs btn-info"> <i class="fa fa-hand-paper-o"></i> </a>&nbsp;&nbsp;' ;
 //                    '<a href="' . route('page.list.donatur-anakasuh', $data->id) . '" data-toggle="tooltip" title="Hooray!" class="btn btn-xs btn-warning"> <i class="fa fa-users"></i> </a>';
             })
             ->make(true);

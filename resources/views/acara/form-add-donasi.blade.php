@@ -43,7 +43,7 @@
                     <div class="form-group">
                         <label for="tgl_lahir" class="col-md-3 control-label">Tanggal Transfer</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control date-picker" id="tgl_transfer" name="tgl_transfer" readonly/>
+                            <input type="text" class="form-control datepicker" id="tgl_transfer" name="tgl_transfer" readonly/>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

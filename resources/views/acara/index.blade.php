@@ -8,11 +8,6 @@
 
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-    <style>
-        .ui-datepicker-calendar {
-            display: none;
-        }
-    </style>
 @stop
 
 @section('content')
@@ -36,12 +31,10 @@
                                 <thead>
                                 <tr>
                                     <th>Nama</th>
-                                    <th>Deskripsi</th>
                                     <th>Periode</th>
                                     <th>Status</th>
                                     <th>Closing By</th>
                                     <th>Closing Date</th>
-                                    <th>Actual Donasi</th>
                                     <th>Jumlah Donasi</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -90,12 +83,10 @@
             ajax: '{!! route('data.acara') !!}',
             columns: [
                 {data: 'nama', name: 'nama'},
-                {data: 'deskripsi', name: 'deskripsi'},
                 {data: 'periode', name: 'periode'},
                 {data: 'status', name: 'status'},
                 {data: 'closing_by', name: 'closing_by'},
                 {data: 'closing_date', name: 'closing_date'},
-                {data: 'actual_donasi', name: 'actual_donasi' , render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: 'jumlah_donasi', name: 'jumlah_donasi'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -175,22 +166,16 @@
 
         function closeForm(id) {
             swal({
-                content: {
-                    element: "input",
-                    attributes: {
-                        placeholder: "Masukan Total Donasi yang diterima!",
-                        type: "input",
-                    },
-                },
+                title: "Apakah anda yakin?",
+                text: "Data " + fName + " ini akan di Closing!",
                 icon: "info",
                 buttons: true,
-            }).then((isTotal) => {
-                if (isTotal) {
+            }).then((isOKe) => {
+                if (isOKe) {
                     $.ajax({
                         url: "{{ url('close-acara') . '/' }}" + id,
                         type: "POST",
                         dataType: 'json',
-                        data: { "total": isTotal },
                         success: function (data) {
                             $('#modal-form').modal('hide');
                             table.ajax.reload();

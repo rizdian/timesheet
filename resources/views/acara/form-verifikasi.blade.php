@@ -6,19 +6,19 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"> &times; </span>
                     </button>
-                    <h3 class="modal-title"></h3>
+                    <h3 class="modal-title-verifikasi">Detail Verifikasi</h3>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nominal" class="col-md-3 control-label">Verifikasi By</label>
+                        <label for="vBy" class="col-md-3 control-label">Verifikasi By</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="vBy"/>
+                            <input type="text" class="form-control" id="vBy" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="nominal" class="col-md-3 control-label">Verifikasi Date</label>
+                        <label for="vDate" class="col-md-3 control-label">Verifikasi Date</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" id="vDate"/>
+                            <input type="text" class="form-control" id="vDate" disabled="disabled"/>
                         </div>
                     </div>
                 </div>

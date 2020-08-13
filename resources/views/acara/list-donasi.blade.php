@@ -20,7 +20,9 @@
                             <h4>Data Donasi Acara <strong>{{ $acara->nama }}</strong></h4>
                         </div>
                         <div class="col-md-6 text-right">
-                            <a onclick="addForm()" class="btn btn-success pull-right">Tambah Donasi</a>
+                            @if($acara->status == 'aktif')
+                                <a onclick="addForm()" class="btn btn-success pull-right">Tambah Donasi</a>
+                            @endif
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -76,8 +78,6 @@
         function notTF() {
             $("#tgl_transfer").prop('disabled', true);
             $("#filename").prop('disabled', true);
-            $('#tgl_transfer').removeAttr("required");
-            $('#filename').removeAttr("required");
         }
 
         $.ajaxSetup({
@@ -94,13 +94,9 @@
             if (this.value === 'cash') {
                 $("#tgl_transfer").prop('disabled', true);
                 $("#filename").prop('disabled', true);
-                $('#tgl_transfer').removeAttr("required");
-                $('#filename').removeAttr("required");
             } else {
                 $("#tgl_transfer").prop('disabled', false);
                 $("#filename").prop('disabled', false);
-                $('#tgl_transfer').attr("required", "required");
-                $('#filename').attr("required", "required");
             }
         });
 

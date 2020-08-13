@@ -21,7 +21,6 @@ class CreateAcarasTable extends Migration
             $table->enum('status', ['aktif','tidak_aktif','closing']);
             $table->string('closing_by')->nullable();
             $table->dateTime('closing_date')->nullable();
-            $table->bigInteger('actual_donasi')->nullable();
             $table->timestamps();
         });
     }
